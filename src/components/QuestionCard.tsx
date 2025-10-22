@@ -44,7 +44,7 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
           <Input
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
-            placeholder="Escribe tu respuesta..."
+            placeholder="Type your answer..."
             className="text-lg h-14"
             disabled={showFeedback}
             autoFocus
@@ -55,7 +55,7 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
             className="w-full text-lg font-bold"
             disabled={!userAnswer.trim() || showFeedback}
           >
-            {showFeedback ? (isCorrect ? "¡Correcto! ✓" : "Incorrecto ✗") : "Responder"}
+            {showFeedback ? (isCorrect ? "Correct! ✓" : "Incorrect ✗") : "Submit Answer"}
           </Button>
         </form>
 
@@ -67,7 +67,7 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
                 : "bg-destructive/10 text-destructive border-2 border-destructive"
             }`}
           >
-            {isCorrect ? "¡Excelente!" : `La respuesta correcta era: ${question.answer}`}
+            {isCorrect ? "Excellent!" : `The correct answer was: ${question.answer}`}
           </div>
         )}
       </CardContent>

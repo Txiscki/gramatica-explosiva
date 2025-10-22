@@ -29,7 +29,7 @@ const BombTimer = ({ timeLeft, totalTime, isActive }: BombTimerProps) => {
       >
         <img
           src={bombImage}
-          alt="Bomba"
+          alt="Bomb"
           className="w-40 h-40 object-contain drop-shadow-2xl"
         />
         <div className="absolute -top-2 -right-2 w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-lg animate-pulse">

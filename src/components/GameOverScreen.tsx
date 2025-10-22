@@ -9,10 +9,10 @@ interface GameOverScreenProps {
 
 const GameOverScreen = ({ score, onRestart }: GameOverScreenProps) => {
   const getMessage = () => {
-    if (score >= 50) return "¡Eres un maestro de la gramática!";
-    if (score >= 30) return "¡Muy bien! Sigue practicando";
-    if (score >= 10) return "¡Buen intento! Puedes mejorar";
-    return "¡Sigue intentándolo!";
+    if (score >= 50) return "You're a grammar master!";
+    if (score >= 30) return "Great job! Keep practicing";
+    if (score >= 10) return "Good try! You can do better";
+    return "Keep trying!";
   };
 
   return (
@@ -23,7 +23,7 @@ const GameOverScreen = ({ score, onRestart }: GameOverScreenProps) => {
             <Trophy className="w-16 h-16 text-white" />
           </div>
           <CardTitle className="text-4xl font-bold mb-2">
-            ¡Fin del Juego!
+            Game Over!
           </CardTitle>
           <CardDescription className="text-2xl mt-2 font-semibold text-foreground">
             {getMessage()}
@@ -31,7 +31,7 @@ const GameOverScreen = ({ score, onRestart }: GameOverScreenProps) => {
         </CardHeader>
         <CardContent>
           <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 rounded-xl mb-8 text-center border-2 border-primary/20">
-            <p className="text-muted-foreground text-lg mb-2">Puntuación Final</p>
+            <p className="text-muted-foreground text-lg mb-2">Final Score</p>
             <p className="text-6xl font-bold text-primary">{score}</p>
           </div>
 
@@ -41,7 +41,7 @@ const GameOverScreen = ({ score, onRestart }: GameOverScreenProps) => {
             className="w-full text-xl font-bold h-16 shadow-lg hover:scale-105 transition-transform"
           >
             <RotateCcw className="w-6 h-6 mr-2" />
-            Jugar de Nuevo
+            Play Again
           </Button>
         </CardContent>
       </Card>

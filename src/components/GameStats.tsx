@@ -12,7 +12,7 @@ const GameStats = ({ score, streak }: GameStatsProps) => {
       <Card className="px-6 py-3 flex items-center gap-3 shadow-md">
         <Trophy className="w-6 h-6 text-secondary" />
         <div>
-          <p className="text-xs text-muted-foreground">Puntos</p>
+          <p className="text-xs text-muted-foreground">Score</p>
           <p className="text-2xl font-bold text-foreground">{score}</p>
         </div>
       </Card>
@@ -20,7 +20,7 @@ const GameStats = ({ score, streak }: GameStatsProps) => {
       <Card className="px-6 py-3 flex items-center gap-3 shadow-md">
         <Zap className="w-6 h-6 text-accent" />
         <div>
-          <p className="text-xs text-muted-foreground">Racha</p>
+          <p className="text-xs text-muted-foreground">Streak</p>
           <p className="text-2xl font-bold text-foreground">{streak}</p>
         </div>
       </Card>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { GameState } from "@/types/game";
+import { GameState, Difficulty } from "@/types/game";
 import { sampleQuestions } from "@/data/sampleQuestions";
 import BombTimer from "@/components/BombTimer";
 import QuestionCard from "@/components/QuestionCard";
@@ -12,6 +12,7 @@ const INITIAL_TIME = 20;
 
 const Index = () => {
   const { toast } = useToast();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("medium");
   const [gameState, setGameState] = useState<GameState>({
     score: 0,
     streak: 0,
@@ -21,32 +22,38 @@ const Index = () => {
     isGameOver: false,
   });
 
-  const [questions, setQuestions] = useState([...sampleQuestions]);
   const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
 
   const getNextQuestion = useCallback(() => {
-    const availableQuestions = questions.filter(q => !usedQuestions.includes(q.id));
+    const difficultyQuestions = sampleQuestions.filter(
+      q => q.difficulty === selectedDifficulty && !usedQuestions.includes(q.id)
+    );
     
-    if (availableQuestions.length === 0) {
+    if (difficultyQuestions.length === 0) {
       setUsedQuestions([]);
-      return questions[Math.floor(Math.random() * questions.length)];
+      const allDifficultyQuestions = sampleQuestions.filter(q => q.difficulty === selectedDifficulty);
+      return allDifficultyQuestions[Math.floor(Math.random() * allDifficultyQuestions.length)];
     }
     
-    const nextQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+    const nextQuestion = difficultyQuestions[Math.floor(Math.random() * difficultyQuestions.length)];
     setUsedQuestions(prev => [...prev, nextQuestion.id]);
     return nextQuestion;
-  }, [questions, usedQuestions]);
+  }, [selectedDifficulty, usedQuestions]);
 
-  const startGame = () => {
+  const startGame = (difficulty: Difficulty) => {
+    setSelectedDifficulty(difficulty);
+    setUsedQuestions([]);
+    
+    const firstQuestion = sampleQuestions.filter(q => q.difficulty === difficulty)[0];
+    
     setGameState({
       score: 0,
       streak: 0,
-      currentQuestion: getNextQuestion(),
+      currentQuestion: firstQuestion,
       timeLeft: INITIAL_TIME,
       isPlaying: true,
       isGameOver: false,
     });
-    setUsedQuestions([]);
   };
 
   const handleAnswer = (isCorrect: boolean) => {
@@ -63,8 +70,8 @@ const Index = () => {
       }));
 
       toast({
-        title: "¡Correcto!",
-        description: `+${points} puntos (Racha: ${streakBonus})`,
+        title: "Correct!",
+        description: `+${points} points (Streak: ${streakBonus})`,
         duration: 2000,
       });
     } else {
@@ -76,8 +83,8 @@ const Index = () => {
       }));
 
       toast({
-        title: "Incorrecto",
-        description: "La racha se reinició",
+        title: "Incorrect",
+        description: "Streak reset",
         variant: "destructive",
         duration: 2000,
       });
@@ -92,8 +99,8 @@ const Index = () => {
     }));
 
     toast({
-      title: "💥 ¡BOOM!",
-      description: "¡La bomba explotó!",
+      title: "💥 BOOM!",
+      description: "The bomb exploded!",
       variant: "destructive",
       duration: 3000,
     });
@@ -120,7 +127,7 @@ const Index = () => {
   }
 
   if (gameState.isGameOver) {
-    return <GameOverScreen score={gameState.score} onRestart={startGame} />;
+    return <GameOverScreen score={gameState.score} onRestart={() => startGame(selectedDifficulty)} />;
   }
 
   return (
