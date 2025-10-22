@@ -1,0 +1,15 @@
+export interface Question {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
+export interface GameState {
+  score: number;
+  streak: number;
+  currentQuestion: Question | null;
+  timeLeft: number;
+  isPlaying: boolean;
+  isGameOver: boolean;
+}
