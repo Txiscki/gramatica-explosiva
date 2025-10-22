@@ -12,7 +12,7 @@ const INITIAL_TIME = 20;
 
 const Index = () => {
   const { toast } = useToast();
-  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("medium");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("b1");
   const [gameState, setGameState] = useState<GameState>({
     score: 0,
     streak: 0,
