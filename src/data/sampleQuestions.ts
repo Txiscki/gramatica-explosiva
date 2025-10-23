@@ -143,6 +143,567 @@ export const sampleQuestions: Question[] = [
     difficulty: "a2"
   },
 
+{
+  id: "a2_21",
+  question: "Translate: Ella está estudiando inglés",
+  answers: ["She is studying English", "she is studying english", "SHE IS STUDYING ENGLISH"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_22",
+  question: "What’s the past of 'go'?",
+  answers: ["went", "Went", "WENT"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_23",
+  question: "Choose: There ___ many people in the park (is/are)",
+  answers: ["are", "Are", "ARE"],
+  category: "Grammar",
+  difficulty: "a2"
+},
+{
+  id: "a2_24",
+  question: "Translate to English: Tengo hambre",
+  answers: ["I am hungry", "I'm hungry", "i am hungry", "i'm hungry", "I AM HUNGRY"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_25",
+  question: "Translate to Spanish: She works in a hospital",
+  answers: ["Ella trabaja en un hospital", "ella trabaja en un hospital"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_26",
+  question: "Complete: They ___ watching TV (are/is)",
+  answers: ["are", "Are", "ARE"],
+  category: "Present Continuous",
+  difficulty: "a2"
+},
+{
+  id: "a2_27",
+  question: "What is the opposite of 'fast'?",
+  answers: ["slow", "Slow", "SLOW"],
+  category: "Vocabulary",
+  difficulty: "a2"
+},
+{
+  id: "a2_28",
+  question: "Phrasal Verb: 'Wake up' means...",
+  answers: ["to stop sleeping", "stop sleeping", "wake", "get out of bed"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_29",
+  question: "Translate: Ellos fueron al cine ayer",
+  answers: ["They went to the cinema yesterday", "they went to the cinema yesterday", "THEY WENT TO THE CINEMA YESTERDAY"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_30",
+  question: "Choose: He ___ play the guitar (can/can’t)",
+  answers: ["can", "Can", "CAN"],
+  category: "Grammar",
+  difficulty: "a2"
+},
+{
+  id: "a2_31",
+  question: "Translate: Hace frío hoy",
+  answers: ["It is cold today", "it's cold today", "It’s cold today", "IT IS COLD TODAY"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_32",
+  question: "What’s the past of 'see'?",
+  answers: ["saw", "Saw", "SAW"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_33",
+  question: "Complete: My mother ___ dinner now (cook/cooking/is cooking)",
+  answers: ["is cooking", "Is cooking", "IS COOKING"],
+  category: "Present Continuous",
+  difficulty: "a2"
+},
+{
+  id: "a2_34",
+  question: "Translate: ¿Dónde vives?",
+  answers: ["Where do you live?", "where do you live", "WHERE DO YOU LIVE?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_35",
+  question: "Translate to Spanish: They don’t like coffee",
+  answers: ["A ellos no les gusta el café", "No les gusta el café", "ellos no les gusta el café"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_36",
+  question: "Phrasal Verb: 'Turn off' means...",
+  answers: ["to stop something working", "apagar", "stop working"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_37",
+  question: "Translate: Ella compró un coche nuevo",
+  answers: ["She bought a new car", "she bought a new car", "SHE BOUGHT A NEW CAR"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_38",
+  question: "Translate to English: ¿Qué hora es?",
+  answers: ["What time is it?", "what time is it", "WHAT TIME IS IT?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_39",
+  question: "Complete: I ___ my homework yesterday (do/did)",
+  answers: ["did", "Did", "DID"],
+  category: "Past Simple",
+  difficulty: "a2"
+},
+{
+  id: "a2_40",
+  question: "What’s the opposite of 'cheap'?",
+  answers: ["expensive", "Expensive", "EXPENSIVE"],
+  category: "Vocabulary",
+  difficulty: "a2"
+},
+{
+  id: "a2_41",
+  question: "Translate: Me gusta leer libros",
+  answers: ["I like reading books", "i like reading books", "I LIKE READING BOOKS"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_42",
+  question: "Translate: El perro está debajo de la mesa",
+  answers: ["The dog is under the table", "the dog is under the table", "THE DOG IS UNDER THE TABLE"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_43",
+  question: "Translate: Estoy cansado",
+  answers: ["I am tired", "I'm tired", "i am tired", "I'M TIRED"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_44",
+  question: "Phrasal Verb: 'Look after' means...",
+  answers: ["to take care of", "cuidar", "take care"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_45",
+  question: "Translate to Spanish: It’s raining outside",
+  answers: ["Está lloviendo fuera", "está lloviendo afuera"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_46",
+  question: "What’s the past of 'have'?",
+  answers: ["had", "Had", "HAD"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_47",
+  question: "Complete: She ___ to music every day (listen/listens)",
+  answers: ["listens", "Listens", "LISTENS"],
+  category: "Present Simple",
+  difficulty: "a2"
+},
+{
+  id: "a2_48",
+  question: "Translate: No tengo dinero",
+  answers: ["I have no money", "I don’t have money", "I don't have any money"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_49",
+  question: "Translate to English: ¿Cuántos años tienes?",
+  answers: ["How old are you?", "how old are you", "HOW OLD ARE YOU?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_50",
+  question: "Phrasal Verb: 'Pick up' means...",
+  answers: ["to lift something", "recoger", "lift up"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_51",
+  question: "Translate: Estoy aprendiendo inglés",
+  answers: ["I am learning English", "I'm learning English", "i am learning english"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_52",
+  question: "What’s the past of 'make'?",
+  answers: ["made", "Made", "MADE"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_53",
+  question: "Translate to Spanish: They are very tired",
+  answers: ["Ellos están muy cansados", "ellos están muy cansados"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_54",
+  question: "Translate: Vivo en una ciudad pequeña",
+  answers: ["I live in a small city", "i live in a small city", "I LIVE IN A SMALL CITY"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_55",
+  question: "Phrasal Verb: 'Get up' means...",
+  answers: ["to leave your bed", "levantarse", "get out of bed"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_56",
+  question: "Translate to English: Mi hermano está en el trabajo",
+  answers: ["My brother is at work", "my brother is at work", "MY BROTHER IS AT WORK"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_57",
+  question: "Complete: She ___ breakfast every morning (eat/eats)",
+  answers: ["eats", "Eats", "EATS"],
+  category: "Present Simple",
+  difficulty: "a2"
+},
+{
+  id: "a2_58",
+  question: "Translate: Ayer llovió mucho",
+  answers: ["It rained a lot yesterday", "it rained a lot yesterday"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_59",
+  question: "Translate: Estoy de acuerdo",
+  answers: ["I agree", "i agree", "I AGREE"],
+  category: "Expressions",
+  difficulty: "a2"
+},
+{
+  id: "a2_60",
+  question: "Translate: ¿Tienes hermanos?",
+  answers: ["Do you have brothers?", "do you have brothers", "DO YOU HAVE BROTHERS?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_61",
+  question: "Translate to English: Ella vive cerca del mar",
+  answers: ["She lives near the sea", "she lives near the sea", "SHE LIVES NEAR THE SEA"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_62",
+  question: "Translate to Spanish: We are late for the meeting",
+  answers: ["Llegamos tarde a la reunión", "Estamos tarde a la reunión"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_63",
+  question: "What’s the past of 'come'?",
+  answers: ["came", "Came", "CAME"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_64",
+  question: "Phrasal Verb: 'Turn on' means...",
+  answers: ["to start something", "encender", "switch on"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_65",
+  question: "Translate: Me gusta la música",
+  answers: ["I like music", "i like music", "I LIKE MUSIC"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_66",
+  question: "Complete: They ___ in the park yesterday (was/were)",
+  answers: ["were", "Were", "WERE"],
+  category: "Past Simple",
+  difficulty: "a2"
+},
+{
+  id: "a2_67",
+  question: "Translate: Ella no tiene tiempo",
+  answers: ["She doesn’t have time", "she doesn't have time", "SHE DOESN'T HAVE TIME"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_68",
+  question: "Translate: ¿Dónde naciste?",
+  answers: ["Where were you born?", "where were you born", "WHERE WERE YOU BORN?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_69",
+  question: "What’s the opposite of 'happy'?",
+  answers: ["sad", "Sad", "SAD"],
+  category: "Vocabulary",
+  difficulty: "a2"
+},
+{
+  id: "a2_70",
+  question: "Translate to Spanish: It’s very sunny today",
+  answers: ["Hace mucho sol hoy", "Está muy soleado hoy"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_71",
+  question: "Phrasal Verb: 'Look for' means...",
+  answers: ["to search", "buscar", "to look for something"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_72",
+  question: "Translate: Mi casa es grande y bonita",
+  answers: ["My house is big and beautiful", "my house is big and beautiful", "MY HOUSE IS BIG AND BEAUTIFUL"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_73",
+  question: "What’s the past of 'take'?",
+  answers: ["took", "Took", "TOOK"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_74",
+  question: "Translate to English: Ella quiere aprender inglés",
+  answers: ["She wants to learn English", "she wants to learn english", "SHE WANTS TO LEARN ENGLISH"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_75",
+  question: "Translate to Spanish: He doesn’t like pizza",
+  answers: ["A él no le gusta la pizza", "No le gusta la pizza"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_76",
+  question: "Translate: Estoy en casa ahora mismo",
+  answers: ["I am at home right now", "I'm at home right now", "i am at home right now"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_77",
+  question: "Complete: We ___ football on Sundays (play/plays)",
+  answers: ["play", "Play", "PLAY"],
+  category: "Present Simple",
+  difficulty: "a2"
+},
+{
+  id: "a2_78",
+  question: "Phrasal Verb: 'Put on' means...",
+  answers: ["to dress", "ponerse", "to put clothes on"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_79",
+  question: "Translate: Me gusta levantarme temprano",
+  answers: ["I like getting up early", "i like getting up early", "I LIKE GETTING UP EARLY"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_80",
+  question: "Translate to Spanish: They are watching a movie",
+  answers: ["Ellos están viendo una película", "ellos están viendo una película"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_81",
+  question: "Translate: ¿Dónde está el baño?",
+  answers: ["Where is the bathroom?", "where is the bathroom", "WHERE IS THE BATHROOM?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_82",
+  question: "Translate: Me encanta este lugar",
+  answers: ["I love this place", "i love this place", "I LOVE THIS PLACE"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_83",
+  question: "Phrasal Verb: 'Go out' means...",
+  answers: ["to leave your house", "salir", "go outside"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_84",
+  question: "Translate to Spanish: He is reading a book now",
+  answers: ["Él está leyendo un libro ahora", "él está leyendo un libro ahora"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_85",
+  question: "What’s the past of 'write'?",
+  answers: ["wrote", "Wrote", "WROTE"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_86",
+  question: "Translate: No entiendo",
+  answers: ["I don't understand", "I do not understand", "i don't understand"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_87",
+  question: "Translate: Hace mucho calor hoy",
+  answers: ["It’s very hot today", "It is very hot today", "it's very hot today"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_88",
+  question: "Phrasal Verb: 'Get off' means...",
+  answers: ["to leave a bus/train", "bajarse", "to exit transport"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_89",
+  question: "Translate to Spanish: We have two dogs",
+  answers: ["Tenemos dos perros", "tenemos dos perros"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_90",
+  question: "Translate: Me duele la cabeza",
+  answers: ["I have a headache", "i have a headache", "I HAVE A HEADACHE"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_91",
+  question: "Translate to English: ¿Qué haces los fines de semana?",
+  answers: ["What do you do on weekends?", "what do you do on weekends", "WHAT DO YOU DO ON WEEKENDS?"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_92",
+  question: "Translate: A ella le gusta bailar",
+  answers: ["She likes dancing", "she likes dancing", "SHE LIKES DANCING"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_93",
+  question: "Phrasal Verb: 'Take off' means...",
+  answers: ["to remove clothes", "quitarse", "to leave the ground"],
+  category: "Phrasal Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_94",
+  question: "Translate: Trabajo los lunes y martes",
+  answers: ["I work on Mondays and Tuesdays", "i work on mondays and tuesdays"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_95",
+  question: "Translate: Ella no puede venir hoy",
+  answers: ["She can't come today", "she cannot come today", "She can’t come today"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_96",
+  question: "Translate to Spanish: He goes to the gym every day",
+  answers: ["Él va al gimnasio todos los días", "va al gimnasio todos los días"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_97",
+  question: "Translate: Es hora de irse",
+  answers: ["It’s time to go", "It is time to go", "it's time to go"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_98",
+  question: "What’s the past of 'run'?",
+  answers: ["ran", "Ran", "RAN"],
+  category: "Irregular Verbs",
+  difficulty: "a2"
+},
+{
+  id: "a2_99",
+  question: "Translate to Spanish: She plays the piano very well",
+  answers: ["Ella toca el piano muy bien", "ella toca el piano muy bien"],
+  category: "Translation",
+  difficulty: "a2"
+},
+{
+  id: "a2_100",
+  question: "Translate: Estoy feliz de verte",
+  answers: ["I am happy to see you", "I'm happy to see you", "i am happy to see you"],
+  category: "Translation",
+  difficulty: "a2"
+},
+
   // B1 Preliminary (PET) Level - Elementary
   {
     id: "b1_1",
