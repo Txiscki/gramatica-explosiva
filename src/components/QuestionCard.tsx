@@ -8,25 +8,46 @@ import { Question } from "@/types/game";
 interface QuestionCardProps {
   question: Question;
   onAnswer: (isCorrect: boolean) => void;
+  isPaused?: boolean;
 }
 
-const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
+const QuestionCard = ({ question, onAnswer, isPaused = false }: QuestionCardProps) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [waitingForContinue, setWaitingForContinue] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const correct = userAnswer.toLowerCase().trim() === question.answer.toLowerCase().trim();
+    // Check if answer matches any accepted answer (case-insensitive, trimmed)
+    const normalizedAnswer = userAnswer.toLowerCase().trim();
+    const correct = question.answers.some(
+      answer => answer.toLowerCase().trim() === normalizedAnswer
+    );
+    
     setIsCorrect(correct);
     setShowFeedback(true);
 
-    setTimeout(() => {
-      onAnswer(correct);
-      setUserAnswer("");
-      setShowFeedback(false);
-    }, 1500);
+    if (correct) {
+      // Auto-continue for correct answers
+      setTimeout(() => {
+        onAnswer(correct);
+        setUserAnswer("");
+        setShowFeedback(false);
+        setWaitingForContinue(false);
+      }, 1500);
+    } else {
+      // Wait for manual continue on wrong answers
+      setWaitingForContinue(true);
+    }
+  };
+
+  const handleContinue = () => {
+    onAnswer(false);
+    setUserAnswer("");
+    setShowFeedback(false);
+    setWaitingForContinue(false);
   };
 
   return (
@@ -46,17 +67,28 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
             onChange={(e) => setUserAnswer(e.target.value)}
             placeholder="Type your answer..."
             className="text-lg h-14"
-            disabled={showFeedback}
+            disabled={showFeedback || isPaused}
             autoFocus
           />
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full text-lg font-bold"
-            disabled={!userAnswer.trim() || showFeedback}
-          >
-            {showFeedback ? (isCorrect ? "Correct! ✓" : "Incorrect ✗") : "Submit Answer"}
-          </Button>
+          {!waitingForContinue ? (
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full text-lg font-bold"
+              disabled={!userAnswer.trim() || showFeedback || isPaused}
+            >
+              {showFeedback ? (isCorrect ? "Correct! ✓" : "Incorrect ✗") : "Submit Answer"}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              size="lg"
+              className="w-full text-lg font-bold"
+              onClick={handleContinue}
+            >
+              Continue
+            </Button>
+          )}
         </form>
 
         {showFeedback && (
@@ -67,7 +99,14 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
                 : "bg-destructive/10 text-destructive border-2 border-destructive"
             }`}
           >
-            {isCorrect ? "Excellent!" : `The correct answer was: ${question.answer}`}
+            {isCorrect ? "Excellent!" : (
+              <div>
+                <div className="mb-2">Incorrect!</div>
+                <div className="text-base">
+                  Correct answer{question.answers.length > 1 ? 's' : ''}: {question.answers.join(', ')}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </CardContent>

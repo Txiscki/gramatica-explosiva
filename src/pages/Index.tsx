@@ -16,6 +16,7 @@ const Index = () => {
   const [gameState, setGameState] = useState<GameState>({
     score: 0,
     streak: 0,
+    maxStreak: 0,
     currentQuestion: null,
     timeLeft: INITIAL_TIME,
     isPlaying: false,
@@ -23,33 +24,38 @@ const Index = () => {
   });
 
   const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
+  const [shuffledQuestions, setShuffledQuestions] = useState<typeof sampleQuestions>([]);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const getNextQuestion = useCallback(() => {
-    const difficultyQuestions = sampleQuestions.filter(
-      q => q.difficulty === selectedDifficulty && !usedQuestions.includes(q.id)
+  const getNextQuestion = () => {
+    const availableQuestions = shuffledQuestions.filter(
+      q => !usedQuestions.includes(q.id)
     );
     
-    if (difficultyQuestions.length === 0) {
+    if (availableQuestions.length === 0) {
       setUsedQuestions([]);
-      const allDifficultyQuestions = sampleQuestions.filter(q => q.difficulty === selectedDifficulty);
-      return allDifficultyQuestions[Math.floor(Math.random() * allDifficultyQuestions.length)];
+      return shuffledQuestions[0];
     }
     
-    const nextQuestion = difficultyQuestions[Math.floor(Math.random() * difficultyQuestions.length)];
+    const nextQuestion = availableQuestions[0];
     setUsedQuestions(prev => [...prev, nextQuestion.id]);
     return nextQuestion;
-  }, [selectedDifficulty, usedQuestions]);
+  };
 
   const startGame = (difficulty: Difficulty) => {
     setSelectedDifficulty(difficulty);
     setUsedQuestions([]);
+    setIsPaused(false);
     
-    const firstQuestion = sampleQuestions.filter(q => q.difficulty === difficulty)[0];
+    const difficultyQuestions = sampleQuestions.filter(q => q.difficulty === difficulty);
+    const shuffled = [...difficultyQuestions].sort(() => Math.random() - 0.5);
+    setShuffledQuestions(shuffled);
     
     setGameState({
       score: 0,
       streak: 0,
-      currentQuestion: firstQuestion,
+      maxStreak: 0,
+      currentQuestion: shuffled[0],
       timeLeft: INITIAL_TIME,
       isPlaying: true,
       isGameOver: false,
@@ -60,14 +66,18 @@ const Index = () => {
     if (isCorrect) {
       const streakBonus = gameState.streak + 1;
       const points = 10 + (streakBonus * 2);
+      const newMaxStreak = Math.max(gameState.maxStreak, streakBonus);
       
       setGameState(prev => ({
         ...prev,
         score: prev.score + points,
         streak: streakBonus,
+        maxStreak: newMaxStreak,
         currentQuestion: getNextQuestion(),
         timeLeft: INITIAL_TIME,
       }));
+
+      setIsPaused(false);
 
       toast({
         title: "Correct!",
@@ -75,19 +85,24 @@ const Index = () => {
         duration: 2000,
       });
     } else {
+      // Pause timer when answer is wrong
+      setIsPaused(true);
+      
+      // Wait for user to click continue
       setGameState(prev => ({
         ...prev,
         streak: 0,
-        currentQuestion: getNextQuestion(),
-        timeLeft: INITIAL_TIME,
       }));
 
-      toast({
-        title: "Incorrect",
-        description: "Streak reset",
-        variant: "destructive",
-        duration: 2000,
-      });
+      // Don't reset immediately - wait for continue button
+      setTimeout(() => {
+        setGameState(prev => ({
+          ...prev,
+          currentQuestion: getNextQuestion(),
+          timeLeft: INITIAL_TIME,
+        }));
+        setIsPaused(false);
+      }, 100);
     }
   };
 
@@ -107,7 +122,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (!gameState.isPlaying || gameState.timeLeft === 0) return;
+    if (!gameState.isPlaying || gameState.timeLeft === 0 || isPaused) return;
 
     const timer = setInterval(() => {
       setGameState(prev => {
@@ -120,14 +135,20 @@ const Index = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [gameState.isPlaying, gameState.timeLeft]);
+  }, [gameState.isPlaying, gameState.timeLeft, isPaused]);
 
   if (!gameState.isPlaying && !gameState.isGameOver) {
     return <StartScreen onStart={startGame} />;
   }
 
   if (gameState.isGameOver) {
-    return <GameOverScreen score={gameState.score} onRestart={() => startGame(selectedDifficulty)} />;
+    return (
+      <GameOverScreen 
+        score={gameState.score} 
+        maxStreak={gameState.maxStreak}
+        onRestart={() => startGame(selectedDifficulty)} 
+      />
+    );
   }
 
   return (
@@ -145,6 +166,7 @@ const Index = () => {
           <QuestionCard
             question={gameState.currentQuestion}
             onAnswer={handleAnswer}
+            isPaused={isPaused}
           />
         )}
       </div>
