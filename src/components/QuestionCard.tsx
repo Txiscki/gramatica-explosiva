@@ -9,13 +9,13 @@ interface QuestionCardProps {
   question: Question;
   onAnswer: (isCorrect: boolean) => void;
   isPaused?: boolean;
+  onContinue: () => void;
 }
 
-const QuestionCard = ({ question, onAnswer, isPaused = false }: QuestionCardProps) => {
+const QuestionCard = ({ question, onAnswer, isPaused = false, onContinue }: QuestionCardProps) => {
   const [userAnswer, setUserAnswer] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [waitingForContinue, setWaitingForContinue] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,19 +35,17 @@ const QuestionCard = ({ question, onAnswer, isPaused = false }: QuestionCardProp
         onAnswer(correct);
         setUserAnswer("");
         setShowFeedback(false);
-        setWaitingForContinue(false);
       }, 1500);
     } else {
-      // Wait for manual continue on wrong answers
-      setWaitingForContinue(true);
+      // Wait for manual continue on wrong answers - timer will pause automatically
+      onAnswer(false);
     }
   };
 
-  const handleContinue = () => {
-    onAnswer(false);
+  const handleContinueClick = () => {
     setUserAnswer("");
     setShowFeedback(false);
-    setWaitingForContinue(false);
+    onContinue();
   };
 
   return (
@@ -70,12 +68,12 @@ const QuestionCard = ({ question, onAnswer, isPaused = false }: QuestionCardProp
             disabled={showFeedback || isPaused}
             autoFocus
           />
-          {!waitingForContinue ? (
+          {!isPaused ? (
             <Button
               type="submit"
               size="lg"
               className="w-full text-lg font-bold"
-              disabled={!userAnswer.trim() || showFeedback || isPaused}
+              disabled={!userAnswer.trim() || showFeedback}
             >
               {showFeedback ? (isCorrect ? "Correct! ✓" : "Incorrect ✗") : "Submit Answer"}
             </Button>
@@ -84,7 +82,7 @@ const QuestionCard = ({ question, onAnswer, isPaused = false }: QuestionCardProp
               type="button"
               size="lg"
               className="w-full text-lg font-bold"
-              onClick={handleContinue}
+              onClick={handleContinueClick}
             >
               Continue
             </Button>

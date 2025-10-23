@@ -77,8 +77,6 @@ const Index = () => {
         timeLeft: INITIAL_TIME,
       }));
 
-      setIsPaused(false);
-
       toast({
         title: "Correct!",
         description: `+${points} points (Streak: ${streakBonus})`,
@@ -88,22 +86,22 @@ const Index = () => {
       // Pause timer when answer is wrong
       setIsPaused(true);
       
-      // Wait for user to click continue
+      // Reset streak immediately
       setGameState(prev => ({
         ...prev,
         streak: 0,
       }));
-
-      // Don't reset immediately - wait for continue button
-      setTimeout(() => {
-        setGameState(prev => ({
-          ...prev,
-          currentQuestion: getNextQuestion(),
-          timeLeft: INITIAL_TIME,
-        }));
-        setIsPaused(false);
-      }, 100);
     }
+  };
+
+  const handleContinue = () => {
+    // Load next question and reset timer
+    setGameState(prev => ({
+      ...prev,
+      currentQuestion: getNextQuestion(),
+      timeLeft: INITIAL_TIME,
+    }));
+    setIsPaused(false);
   };
 
   const gameOver = () => {
@@ -167,6 +165,7 @@ const Index = () => {
             question={gameState.currentQuestion}
             onAnswer={handleAnswer}
             isPaused={isPaused}
+            onContinue={handleContinue}
           />
         )}
       </div>
