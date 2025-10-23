@@ -845,6 +845,566 @@ export const sampleQuestions: Question[] = [
     category: "Phrasal Verbs",
     difficulty: "b1"
   },
+  {
+  id: "b1_21",
+  question: "Translate to English: Ella estudia todos los días",
+  answers: ["She studies every day", "she studies every day", "SHE STUDIES EVERY DAY"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_22",
+  question: "Translate to Spanish: We are going to the cinema",
+  answers: ["Vamos al cine", "Nos vamos al cine"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_23",
+  question: "Phrasal Verb: 'Give up' means...",
+  answers: ["to quit", "rendirse", "to stop trying"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_24",
+  question: "What’s the past of 'catch'?",
+  answers: ["caught", "Caught", "CAUGHT"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_25",
+  question: "Translate: Me gusta leer libros",
+  answers: ["I like reading books", "i like reading books", "I LIKE READING BOOKS"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_26",
+  question: "Translate: Ellos están cocinando ahora",
+  answers: ["They are cooking now", "they are cooking now", "THEY ARE COOKING NOW"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_27",
+  question: "Complete: If I ___ enough money, I would buy a car (have/had)",
+  answers: ["had", "Had", "HAD"],
+  category: "Second Conditional",
+  difficulty: "b1"
+},
+{
+  id: "b1_28",
+  question: "Translate to Spanish: She doesn’t like swimming",
+  answers: ["A ella no le gusta nadar", "No le gusta nadar"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_29",
+  question: "Phrasal Verb: 'Look after' means...",
+  answers: ["to take care of", "cuidar de", "to watch over"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_30",
+  question: "Translate: Necesito ir al supermercado",
+  answers: ["I need to go to the supermarket", "i need to go to the supermarket", "I NEED TO GO TO THE SUPERMARKET"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_31",
+  question: "Translate to English: Ellos jugaron al fútbol ayer",
+  answers: ["They played football yesterday", "they played football yesterday", "THEY PLAYED FOOTBALL YESTERDAY"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_32",
+  question: "What’s the past of 'drink'?",
+  answers: ["drank", "Drank", "DRANK"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_33",
+  question: "Translate to Spanish: I’m very tired today",
+  answers: ["Estoy muy cansado hoy", "Estoy muy cansada hoy"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_34",
+  question: "Complete: They ___ to the park every weekend (go/goes)",
+  answers: ["go", "Go", "GO"],
+  category: "Present Simple",
+  difficulty: "b1"
+},
+{
+  id: "b1_35",
+  question: "Translate: Me encanta viajar",
+  answers: ["I love traveling", "I love travelling", "i love traveling"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_36",
+  question: "Phrasal Verb: 'Run into' means...",
+  answers: ["to meet by chance", "encontrarse con", "to bump into"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_37",
+  question: "Translate: Hoy hace mucho frío",
+  answers: ["It’s very cold today", "It is very cold today", "it's very cold today"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_38",
+  question: "Translate to English: Ella está aprendiendo inglés",
+  answers: ["She is learning English", "she is learning english", "SHE IS LEARNING ENGLISH"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_39",
+  question: "What’s the past of 'sing'?",
+  answers: ["sang", "Sang", "SANG"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_40",
+  question: "Translate: Tengo hambre",
+  answers: ["I am hungry", "I'm hungry", "i am hungry"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_41",
+  question: "Complete: She ___ dinner when I arrived (was cooking/cooked)",
+  answers: ["was cooking", "Was cooking", "WAS COOKING"],
+  category: "Past Continuous",
+  difficulty: "b1"
+},
+{
+  id: "b1_42",
+  question: "Translate to Spanish: We have never been to Italy",
+  answers: ["Nunca hemos estado en Italia", "No hemos estado nunca en Italia"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_43",
+  question: "Phrasal Verb: 'Turn off' means...",
+  answers: ["to switch off", "apagar", "to stop a device"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_44",
+  question: "Translate: Ellos no entienden la lección",
+  answers: ["They don’t understand the lesson", "they do not understand the lesson", "THEY DON'T UNDERSTAND THE LESSON"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_45",
+  question: "Translate: Estoy aprendiendo a nadar",
+  answers: ["I am learning to swim", "i am learning to swim", "I'M LEARNING TO SWIM"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_46",
+  question: "What’s the past of 'teach'?",
+  answers: ["taught", "Taught", "TAUGHT"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_47",
+  question: "Translate to English: ¿Cuál es tu comida favorita?",
+  answers: ["What is your favorite food?", "what is your favourite food", "WHAT IS YOUR FAVORITE FOOD?"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_48",
+  question: "Translate to Spanish: I’m going to the park now",
+  answers: ["Voy al parque ahora", "Estoy yendo al parque ahora"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_49",
+  question: "Phrasal Verb: 'Pick up' means...",
+  answers: ["to lift", "recoger", "to collect someone or something"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_50",
+  question: "Translate: Me gusta correr por la mañana",
+  answers: ["I like running in the morning", "i like running in the morning", "I LIKE RUNNING IN THE MORNING"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_51",
+  question: "Translate to English: Ellos siempre llegan tarde",
+  answers: ["They are always late", "they are always late", "THEY ARE ALWAYS LATE"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_52",
+  question: "Translate: Me encanta la música",
+  answers: ["I love music", "i love music", "I LOVE MUSIC"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_53",
+  question: "What’s the past of 'buy'?",
+  answers: ["bought", "Bought", "BOUGHT"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_54",
+  question: "Translate to Spanish: She has been reading all day",
+  answers: ["Ella ha estado leyendo todo el día", "Ha estado leyendo todo el día"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_55",
+  question: "Phrasal Verb: 'Call off' means...",
+  answers: ["to cancel", "cancelar", "to stop an event"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_56",
+  question: "Translate: Ellos están viendo una película ahora",
+  answers: ["They are watching a movie now", "they are watching a film now", "THEY ARE WATCHING A MOVIE NOW"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_57",
+  question: "Complete: I ___ never seen such a beautiful place (have/has)",
+  answers: ["have", "Have", "HAVE"],
+  category: "Present Perfect",
+  difficulty: "b1"
+},
+{
+  id: "b1_58",
+  question: "Translate: Voy a comprar pan",
+  answers: ["I’m going to buy bread", "i'm going to buy bread", "I AM GOING TO BUY BREAD"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_59",
+  question: "What’s the past of 'run'?",
+  answers: ["ran", "Ran", "RAN"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_60",
+  question: "Translate to Spanish: They are playing football now",
+  answers: ["Ellos están jugando al fútbol ahora", "Están jugando al fútbol ahora"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_61",
+  question: "Translate: Me gustaría viajar a España",
+  answers: ["I would like to travel to Spain", "i would like to travel to Spain", "I WOULD LIKE TO TRAVEL TO SPAIN"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_62",
+  question: "Phrasal Verb: 'Look forward to' means...",
+  answers: ["to anticipate with pleasure", "esperar con ilusión", "to be excited about"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_63",
+  question: "Translate to English: Ellos no han terminado la tarea",
+  answers: ["They haven’t finished the homework", "they have not finished the homework", "THEY HAVEN'T FINISHED THE HOMEWORK"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_64",
+  question: "What’s the past of 'bring'?",
+  answers: ["brought", "Brought", "BROUGHT"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_65",
+  question: "Translate: Estoy estudiando inglés",
+  answers: ["I am studying English", "i am studying english", "I'M STUDYING ENGLISH"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_66",
+  question: "Translate to Spanish: I have never seen that movie",
+  answers: ["Nunca he visto esa película", "No he visto esa película nunca"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_67",
+  question: "Phrasal Verb: 'Take off' means...",
+  answers: ["to remove", "quitar", "to rise into the air (plane)"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_68",
+  question: "Translate: Me encanta cocinar",
+  answers: ["I love cooking", "i love cooking", "I LOVE COOKING"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_69",
+  question: "Complete: He ___ his homework before dinner (had finished/finished)",
+  answers: ["had finished", "Had finished", "HAD FINISHED"],
+  category: "Past Perfect",
+  difficulty: "b1"
+},
+{
+  id: "b1_70",
+  question: "Translate to English: Ellos han comprado un coche nuevo",
+  answers: ["They have bought a new car", "they have bought a new car", "THEY HAVE BOUGHT A NEW CAR"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_71",
+  question: "Translate: No me gusta levantarme temprano",
+  answers: ["I don’t like getting up early", "i don't like getting up early", "I DON'T LIKE GETTING UP EARLY"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_72",
+  question: "Phrasal Verb: 'Give up' means...",
+  answers: ["to stop trying", "rendirse", "to quit"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_73",
+  question: "Translate to Spanish: She is reading a book",
+  answers: ["Ella está leyendo un libro", "Está leyendo un libro"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_74",
+  question: "What’s the past of 'see'?",
+  answers: ["saw", "Saw", "SAW"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_75",
+  question: "Translate: Estoy aprendiendo a conducir",
+  answers: ["I am learning to drive", "i am learning to drive", "I'M LEARNING TO DRIVE"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_76",
+  question: "Translate to English: Ellos siempre han vivido aquí",
+  answers: ["They have always lived here", "they have always lived here", "THEY HAVE ALWAYS LIVED HERE"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_77",
+  question: "Phrasal Verb: 'Look after' means...",
+  answers: ["to take care of", "cuidar", "to attend to"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_78",
+  question: "Translate: Me gusta ir al cine",
+  answers: ["I like going to the cinema", "i like going to the cinema", "I LIKE GOING TO THE CINEMA"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_79",
+  question: "Complete: By the time she arrived, we ___ (had left/left)",
+  answers: ["had left", "Had left", "HAD LEFT"],
+  category: "Past Perfect",
+  difficulty: "b1"
+},
+{
+  id: "b1_80",
+  question: "Translate to Spanish: I’ve never eaten sushi",
+  answers: ["Nunca he comido sushi", "No he comido sushi nunca"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_81",
+  question: "Translate: Estoy viendo la televisión",
+  answers: ["I am watching TV", "i am watching tv", "I'M WATCHING TV"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_82",
+  question: "Phrasal Verb: 'Pick up' means...",
+  answers: ["to collect", "recoger", "to lift"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_83",
+  question: "Translate to English: Ella no ha terminado su tarea",
+  answers: ["She hasn’t finished her homework", "she has not finished her homework", "SHE HASN'T FINISHED HER HOMEWORK"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_84",
+  question: "What’s the past of 'drink'?",
+  answers: ["drank", "Drank", "DRANK"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_85",
+  question: "Translate: Me gustaría aprender inglés",
+  answers: ["I would like to learn English", "i would like to learn english", "I WOULD LIKE TO LEARN ENGLISH"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_86",
+  question: "Translate to Spanish: I’m going to the supermarket",
+  answers: ["Voy al supermercado", "Estoy yendo al supermercado"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_87",
+  question: "Phrasal Verb: 'Set up' means...",
+  answers: ["to establish", "montar", "to arrange"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_88",
+  question: "Translate: Me encanta viajar",
+  answers: ["I love traveling", "i love traveling", "I LOVE TRAVELING"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_89",
+  question: "Complete: He ___ already ___ his homework (has/finished)",
+  answers: ["has finished", "Has finished", "HAS FINISHED"],
+  category: "Present Perfect",
+  difficulty: "b1"
+},
+{
+  id: "b1_90",
+  question: "Translate to English: Ellos están corriendo en el parque",
+  answers: ["They are running in the park", "they are running in the park", "THEY ARE RUNNING IN THE PARK"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_91",
+  question: "Translate: Estoy escribiendo un email",
+  answers: ["I am writing an email", "i am writing an email", "I'M WRITING AN EMAIL"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_92",
+  question: "Phrasal Verb: 'Turn on' means...",
+  answers: ["to switch on", "encender", "to activate"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_93",
+  question: "Translate to Spanish: She has just arrived",
+  answers: ["Ella acaba de llegar", "Acaba de llegar"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_94",
+  question: "What’s the past of 'come'?",
+  answers: ["came", "Came", "CAME"],
+  category: "Irregular Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_95",
+  question: "Translate: Me gusta leer libros",
+  answers: ["I like reading books", "i like reading books", "I LIKE READING BOOKS"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_96",
+  question: "Translate to English: Ellos están preparando la cena",
+  answers: ["They are preparing dinner", "they are preparing dinner", "THEY ARE PREPARING DINNER"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_97",
+  question: "Phrasal Verb: 'Take care of' means...",
+  answers: ["to look after", "cuidar", "to attend to"],
+  category: "Phrasal Verbs",
+  difficulty: "b1"
+},
+{
+  id: "b1_98",
+  question: "Translate: Me gustaría visitar Londres",
+  answers: ["I would like to visit London", "i would like to visit london", "I WOULD LIKE TO VISIT LONDON"],
+  category: "Translation",
+  difficulty: "b1"
+},
+{
+  id: "b1_99",
+  question: "Complete: I ___ never ___ that movie (have/seen)",
+  answers: ["have seen", "Have seen", "HAVE SEEN"],
+  category: "Present Perfect",
+  difficulty: "b1"
+},
+{
+  id: "b1_100",
+  question: "Translate to Spanish: I’m waiting for the bus",
+  answers: ["Estoy esperando el autobús", "Estoy esperando el bus"],
+  category: "Translation",
+  difficulty: "b1"
+},
 
   // B2 First (FCE) Level - Intermediate
   {
