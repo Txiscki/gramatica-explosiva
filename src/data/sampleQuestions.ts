@@ -1813,7 +1813,7 @@ export const sampleQuestions: Question[] = [
   {
     id: "c2_18",
     question: "Complete: The researcher's methodology was beyond ___",
-    answers: ["reproach", "criticism", "question", "dispute"],
+    answers: ["reproach", "criticism", "question", "dispute", "comprehension"],
     category: "Idioms",
     difficulty: "c2"
   },
