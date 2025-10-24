@@ -1,71 +1,91 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Trophy, RotateCcw } from "lucide-react";
-import { saveHighScore, saveHighStreak, getTopScores, getTopStreaks, LeaderboardEntry } from "@/services/leaderboardService";
 import Leaderboard from "@/components/Leaderboard";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { saveGameSession, getTopScoresByLevel, getTopStreaksByLevel, GameSession } from "@/services/gameSessionService";
+import { checkAndAwardAchievements, Achievement } from "@/services/achievementService";
+import { getUserSessions } from "@/services/gameSessionService";
+import { Difficulty } from "@/types/game";
 
 interface GameOverScreenProps {
   score: number;
   maxStreak: number;
+  difficulty: Difficulty;
   onRestart: () => void;
 }
 
-const GameOverScreen = ({ score, maxStreak, onRestart }: GameOverScreenProps) => {
+const GameOverScreen = ({ score, maxStreak, difficulty, onRestart }: GameOverScreenProps) => {
   const { toast } = useToast();
-  const [playerName, setPlayerName] = useState("");
+  const { user, userProfile } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [scoreSaved, setScoreSaved] = useState(false);
-  const [topScores, setTopScores] = useState<LeaderboardEntry[]>([]);
-  const [topStreaks, setTopStreaks] = useState<LeaderboardEntry[]>([]);
+  const [topScores, setTopScores] = useState<GameSession[]>([]);
+  const [topStreaks, setTopStreaks] = useState<GameSession[]>([]);
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
 
   useEffect(() => {
-    loadLeaderboards();
-  }, []);
+    const saveAndLoadData = async () => {
+      if (user && userProfile && !scoreSaved) {
+        setIsSaving(true);
+        try {
+          // Save game session
+          await saveGameSession({
+            userId: user.uid,
+            displayName: userProfile.displayName,
+            difficulty,
+            score,
+            streak: maxStreak,
+            timestamp: Date.now()
+          });
 
-  const loadLeaderboards = async () => {
-    const scores = await getTopScores(10);
-    const streaks = await getTopStreaks(10);
-    setTopScores(scores);
-    setTopStreaks(streaks);
-  };
+          // Check for achievements
+          const userSessions = await getUserSessions(user.uid);
+          const achievements = await checkAndAwardAchievements(
+            user.uid,
+            score,
+            maxStreak,
+            userSessions.length
+          );
 
-  const handleSaveScore = async () => {
-    if (!playerName.trim()) {
-      toast({
-        title: "Name required",
-        description: "Please enter your name to save your score",
-        variant: "destructive",
-      });
-      return;
-    }
+          if (achievements.length > 0) {
+            setNewAchievements(achievements);
+            toast({
+              title: "🎉 New Achievement!",
+              description: `You earned: ${achievements.map(a => a.name).join(", ")}`,
+              duration: 5000,
+            });
+          }
 
-    setIsSaving(true);
-    try {
-      await Promise.all([
-        saveHighScore(playerName.trim(), score),
-        saveHighStreak(playerName.trim(), maxStreak)
+          setScoreSaved(true);
+          toast({
+            title: "Score saved!",
+            description: "Your score has been recorded",
+          });
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "Failed to save score. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsSaving(false);
+        }
+      }
+
+      // Load leaderboards
+      const [scores, streaks] = await Promise.all([
+        getTopScoresByLevel(difficulty, 10),
+        getTopStreaksByLevel(difficulty, 10)
       ]);
-      
-      setScoreSaved(true);
-      await loadLeaderboards();
-      
-      toast({
-        title: "Score saved!",
-        description: "Your score has been added to the leaderboard",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to save score. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
+      setTopScores(scores);
+      setTopStreaks(streaks);
+    };
+
+    saveAndLoadData();
+  }, [user, userProfile, score, maxStreak, difficulty, scoreSaved]);
 
   const getMessage = () => {
     if (score >= 50) return "You're a grammar master!";
@@ -100,30 +120,35 @@ const GameOverScreen = ({ score, maxStreak, onRestart }: GameOverScreenProps) =>
             </div>
           </div>
 
-          {!scoreSaved ? (
-            <div className="space-y-4 mb-6">
-              <div className="space-y-2">
-                <Input
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="text-lg h-12"
-                  maxLength={20}
-                  disabled={isSaving}
-                />
-              </div>
-              <Button
-                onClick={handleSaveScore}
-                size="lg"
-                className="w-full text-lg font-bold h-12"
-                disabled={isSaving}
-              >
-                {isSaving ? "Saving..." : "Save to Leaderboard"}
-              </Button>
+          {isSaving && (
+            <div className="mb-6 p-4 bg-primary/10 text-primary border-2 border-primary rounded-lg text-center font-semibold">
+              Saving your score...
             </div>
-          ) : (
+          )}
+
+          {scoreSaved && (
             <div className="mb-6 p-4 bg-success/10 text-success border-2 border-success rounded-lg text-center font-semibold">
               Score saved successfully!
+            </div>
+          )}
+
+          {newAchievements.length > 0 && (
+            <div className="mb-6 space-y-2">
+              <h3 className="font-bold text-lg text-center">🎉 New Achievements!</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {newAchievements.map((achievement) => (
+                  <div
+                    key={achievement.id}
+                    className="flex items-center gap-2 p-3 bg-secondary/10 rounded-lg border-2 border-secondary"
+                  >
+                    <span className="text-2xl">{achievement.icon}</span>
+                    <div>
+                      <p className="font-semibold text-sm">{achievement.name}</p>
+                      <p className="text-xs text-muted-foreground">{achievement.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -137,7 +162,11 @@ const GameOverScreen = ({ score, maxStreak, onRestart }: GameOverScreenProps) =>
             Play Again
           </Button>
 
-          <Leaderboard scores={topScores} streaks={topStreaks} />
+          <Leaderboard 
+            scores={topScores} 
+            streaks={topStreaks} 
+            difficulty={difficulty}
+          />
         </CardContent>
       </Card>
     </div>

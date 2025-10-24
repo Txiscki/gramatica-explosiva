@@ -1,16 +1,28 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { LogOut, LayoutDashboard } from "lucide-react";
 import bombImage from "@/assets/bomb.png";
 import { Difficulty } from "@/types/game";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOut } from "@/services/authService";
+import BadgeDisplay from "./BadgeDisplay";
 
 interface StartScreenProps {
   onStart: (difficulty: Difficulty) => void;
 }
 
 const StartScreen = ({ onStart }: StartScreenProps) => {
+  const navigate = useNavigate();
+  const { user, userProfile } = useAuth();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("b1");
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
 
   const difficulties = [
     { 
@@ -51,8 +63,32 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="max-w-4xl w-full shadow-2xl border-2 animate-bounce-in">
+    <div className="min-h-screen p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {user && userProfile && (
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold">Welcome back, {userProfile.displayName}!</h2>
+              <p className="text-muted-foreground">Role: {userProfile.role}</p>
+            </div>
+            <div className="flex gap-2">
+              {userProfile.role === "teacher" && (
+                <Button onClick={() => navigate("/teacher-dashboard")} variant="outline">
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              )}
+              <Button onClick={handleSignOut} variant="outline">
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {user && <BadgeDisplay userId={user.uid} />}
+
+      <Card className="w-full shadow-2xl border-2 animate-bounce-in">
         <CardHeader className="text-center pb-0">
           <img
             src={bombImage}
@@ -111,6 +147,7 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
           </Button>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };

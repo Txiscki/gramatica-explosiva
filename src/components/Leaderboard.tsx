@@ -1,15 +1,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Zap } from "lucide-react";
-import { LeaderboardEntry } from "@/services/leaderboardService";
+import { Badge } from "@/components/ui/badge";
+import { Difficulty } from "@/types/game";
+
+interface LeaderboardEntry {
+  displayName: string;
+  score?: number;
+  streak?: number;
+  difficulty?: Difficulty;
+}
 
 interface LeaderboardProps {
   scores: LeaderboardEntry[];
   streaks: LeaderboardEntry[];
+  difficulty?: Difficulty;
+  showDifficulty?: boolean;
 }
 
-const Leaderboard = ({ scores, streaks }: LeaderboardProps) => {
+const Leaderboard = ({ scores, streaks, difficulty, showDifficulty = false }: LeaderboardProps) => {
+  const difficultyColors = {
+    a2: "bg-success",
+    b1: "bg-secondary",
+    b2: "bg-accent",
+    c1: "bg-primary",
+    c2: "bg-destructive"
+  };
+
+  const title = difficulty 
+    ? `${difficulty.toUpperCase()} Level Leaderboards`
+    : "Global Leaderboards";
+
   return (
-    <div className="grid md:grid-cols-2 gap-6 mt-6">
+    <div className="space-y-4">
+      {difficulty && (
+        <h2 className="text-2xl font-bold text-center">{title}</h2>
+      )}
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -24,12 +50,19 @@ const Leaderboard = ({ scores, streaks }: LeaderboardProps) => {
             ) : (
               scores.map((entry, index) => (
                 <div
-                  key={`${entry.name}-${entry.timestamp}`}
+                  key={`${entry.displayName}-${index}`}
                   className="flex items-center justify-between p-3 bg-secondary/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-bold text-lg text-primary">#{index + 1}</span>
-                    <span className="font-medium">{entry.name}</span>
+                    <div className="flex flex-col">
+                      <span className="font-medium">{entry.displayName}</span>
+                      {showDifficulty && entry.difficulty && (
+                        <Badge className={`${difficultyColors[entry.difficulty]} text-xs mt-1`}>
+                          {entry.difficulty.toUpperCase()}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                   <span className="font-bold text-secondary">{entry.score}</span>
                 </div>
@@ -53,12 +86,19 @@ const Leaderboard = ({ scores, streaks }: LeaderboardProps) => {
             ) : (
               streaks.map((entry, index) => (
                 <div
-                  key={`${entry.name}-${entry.timestamp}`}
+                  key={`${entry.displayName}-${index}`}
                   className="flex items-center justify-between p-3 bg-accent/10 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-bold text-lg text-primary">#{index + 1}</span>
-                    <span className="font-medium">{entry.name}</span>
+                    <div className="flex flex-col">
+                      <span className="font-medium">{entry.displayName}</span>
+                      {showDifficulty && entry.difficulty && (
+                        <Badge className={`${difficultyColors[entry.difficulty]} text-xs mt-1`}>
+                          {entry.difficulty.toUpperCase()}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                   <span className="font-bold text-accent">{entry.streak}</span>
                 </div>
@@ -67,6 +107,7 @@ const Leaderboard = ({ scores, streaks }: LeaderboardProps) => {
           </div>
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 };

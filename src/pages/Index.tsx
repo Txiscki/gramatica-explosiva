@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { GameState, Difficulty } from "@/types/game";
 import { sampleQuestions } from "@/data/sampleQuestions";
 import BombTimer from "@/components/BombTimer";
@@ -7,12 +8,21 @@ import GameStats from "@/components/GameStats";
 import StartScreen from "@/components/StartScreen";
 import GameOverScreen from "@/components/GameOverScreen";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const INITIAL_TIME = 20;
 
 const Index = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading } = useAuth();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("b1");
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/auth");
+    }
+  }, [user, loading, navigate]);
   const [gameState, setGameState] = useState<GameState>({
     score: 0,
     streak: 0,
@@ -135,6 +145,18 @@ const Index = () => {
     return () => clearInterval(timer);
   }, [gameState.isPlaying, gameState.timeLeft, isPaused]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
   if (!gameState.isPlaying && !gameState.isGameOver) {
     return <StartScreen onStart={startGame} />;
   }
@@ -144,6 +166,7 @@ const Index = () => {
       <GameOverScreen 
         score={gameState.score} 
         maxStreak={gameState.maxStreak}
+        difficulty={selectedDifficulty}
         onRestart={() => startGame(selectedDifficulty)} 
       />
     );
