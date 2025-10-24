@@ -26,6 +26,38 @@ export const ACHIEVEMENTS: Achievement[] = [
     type: "games"
   },
   {
+    id: "perfect_game",
+    name: "Perfect Game",
+    description: "Answer all questions correctly in a single game",
+    icon: "🏹",
+    requirement: 1,
+    type: "games"
+  },
+  {
+    id: "speedster",
+    name: "Speedster",
+    description: "Complete a game in under 5 minutes",
+    icon: "⏱️",
+    requirement: 1,
+    type: "games"
+  },
+  {
+    id: "comeback",
+    name: "Comeback",
+    description: "Recover from 3+ wrong answers to finish strong",
+    icon: "🔄",
+    requirement: 1,
+    type: "games"
+  },
+  {
+    id: "vocabulary_wizard",
+    name: "Vocabulary Wizard",
+    description: "Answer 20+ questions correctly across all games",
+    icon: "💡",
+    requirement: 20,
+    type: "score"
+  },
+  {
     id: "streak_5",
     name: "Streak Master",
     description: "Achieve a 5-answer streak",
@@ -130,7 +162,11 @@ export const checkAndAwardAchievements = async (
   userId: string,
   score: number,
   streak: number,
-  gameCount: number
+  gameCount: number,
+  isPerfectGame: boolean,
+  completionTimeSeconds: number,
+  hadComeback: boolean,
+  totalCorrectAnswersAllTime: number
 ) => {
   const userAchievements = await getUserAchievements(userId);
   const earnedIds = userAchievements.map(ua => ua.achievementId);
@@ -143,13 +179,25 @@ export const checkAndAwardAchievements = async (
 
     switch (achievement.type) {
       case "score":
-        shouldAward = score >= achievement.requirement;
+        if (achievement.id === "vocabulary_wizard") {
+          shouldAward = totalCorrectAnswersAllTime >= achievement.requirement;
+        } else {
+          shouldAward = score >= achievement.requirement;
+        }
         break;
       case "streak":
         shouldAward = streak >= achievement.requirement;
         break;
       case "games":
-        shouldAward = gameCount >= achievement.requirement;
+        if (achievement.id === "perfect_game") {
+          shouldAward = isPerfectGame;
+        } else if (achievement.id === "speedster") {
+          shouldAward = completionTimeSeconds <= 300; // 5 minutes
+        } else if (achievement.id === "comeback") {
+          shouldAward = hadComeback;
+        } else {
+          shouldAward = gameCount >= achievement.requirement;
+        }
         break;
     }
 

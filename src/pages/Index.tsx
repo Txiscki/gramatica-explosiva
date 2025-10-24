@@ -36,6 +36,12 @@ const Index = () => {
   const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
   const [shuffledQuestions, setShuffledQuestions] = useState<typeof sampleQuestions>([]);
   const [isPaused, setIsPaused] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState<number>(0);
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [wrongAnswersCount, setWrongAnswersCount] = useState(0);
+  const [consecutiveWrong, setConsecutiveWrong] = useState(0);
+  const [maxConsecutiveWrong, setMaxConsecutiveWrong] = useState(0);
+  const [totalQuestionsAnswered, setTotalQuestionsAnswered] = useState(0);
 
   const getNextQuestion = () => {
     const availableQuestions = shuffledQuestions.filter(
@@ -56,6 +62,12 @@ const Index = () => {
     setSelectedDifficulty(difficulty);
     setUsedQuestions([]);
     setIsPaused(false);
+    setGameStartTime(Date.now());
+    setCorrectAnswersCount(0);
+    setWrongAnswersCount(0);
+    setConsecutiveWrong(0);
+    setMaxConsecutiveWrong(0);
+    setTotalQuestionsAnswered(0);
     
     const difficultyQuestions = sampleQuestions.filter(q => q.difficulty === difficulty);
     const shuffled = [...difficultyQuestions].sort(() => Math.random() - 0.5);
@@ -73,7 +85,12 @@ const Index = () => {
   };
 
   const handleAnswer = (isCorrect: boolean) => {
+    setTotalQuestionsAnswered(prev => prev + 1);
+    
     if (isCorrect) {
+      setCorrectAnswersCount(prev => prev + 1);
+      setConsecutiveWrong(0);
+      
       const streakBonus = gameState.streak + 1;
       const points = 10 + (streakBonus * 2);
       const newMaxStreak = Math.max(gameState.maxStreak, streakBonus);
@@ -93,6 +110,11 @@ const Index = () => {
         duration: 2000,
       });
     } else {
+      setWrongAnswersCount(prev => prev + 1);
+      const newConsecutiveWrong = consecutiveWrong + 1;
+      setConsecutiveWrong(newConsecutiveWrong);
+      setMaxConsecutiveWrong(prev => Math.max(prev, newConsecutiveWrong));
+      
       // Pause timer when answer is wrong
       setIsPaused(true);
       
@@ -162,11 +184,21 @@ const Index = () => {
   }
 
   if (gameState.isGameOver) {
+    const completionTimeSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
+    const isPerfectGame = wrongAnswersCount === 0 && totalQuestionsAnswered > 0;
+    const hadComeback = maxConsecutiveWrong >= 3 && totalQuestionsAnswered > 0;
+    
     return (
       <GameOverScreen 
         score={gameState.score} 
         maxStreak={gameState.maxStreak}
         difficulty={selectedDifficulty}
+        totalQuestions={totalQuestionsAnswered}
+        correctAnswers={correctAnswersCount}
+        wrongAnswers={wrongAnswersCount}
+        completionTimeSeconds={completionTimeSeconds}
+        isPerfectGame={isPerfectGame}
+        hadComeback={hadComeback}
         onRestart={() => startGame(selectedDifficulty)} 
       />
     );

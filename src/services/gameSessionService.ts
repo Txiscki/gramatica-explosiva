@@ -9,6 +9,12 @@ export interface GameSession {
   score: number;
   streak: number;
   timestamp: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  completionTimeSeconds: number;
+  isPerfectGame: boolean;
+  hadComeback: boolean;
 }
 
 export const saveGameSession = async (session: GameSession) => {

@@ -4,10 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, TrendingUp, Trophy } from "lucide-react";
+import { ArrowLeft, TrendingUp, Trophy, Award } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getAllSessions, GameSession } from "@/services/gameSessionService";
 import { getAllUsers, UserProfile } from "@/services/userService";
+import { getUserAchievements, ACHIEVEMENTS } from "@/services/achievementService";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const TeacherDashboard = () => {
   const [sessions, setSessions] = useState<GameSession[]>([]);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userAchievements, setUserAchievements] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (userProfile?.role !== "teacher") {
@@ -28,7 +30,19 @@ const TeacherDashboard = () => {
         getAllUsers()
       ]);
       setSessions(sessionsData);
-      setUsers(usersData.filter(u => u.role === "student"));
+      const students = usersData.filter(u => u.role === "student");
+      setUsers(students);
+      
+      // Load achievements for each student
+      const achievementCounts: Record<string, number> = {};
+      for (const student of students) {
+        if (student.uid) {
+          const achievements = await getUserAchievements(student.uid);
+          achievementCounts[student.uid] = achievements.length;
+        }
+      }
+      setUserAchievements(achievementCounts);
+      
       setLoading(false);
     };
 
@@ -41,8 +55,10 @@ const TeacherDashboard = () => {
     const totalScore = studentSessions.reduce((sum, s) => sum + s.score, 0);
     const maxStreak = Math.max(...studentSessions.map(s => s.streak), 0);
     const avgScore = totalGames > 0 ? Math.round(totalScore / totalGames) : 0;
+    const totalCorrectAnswers = studentSessions.reduce((sum, s) => sum + (s.correctAnswers || 0), 0);
+    const perfectGames = studentSessions.filter(s => s.isPerfectGame).length;
 
-    return { totalGames, totalScore, maxStreak, avgScore };
+    return { totalGames, totalScore, maxStreak, avgScore, totalCorrectAnswers, perfectGames };
   };
 
   const difficultyColors = {
@@ -111,15 +127,18 @@ const TeacherDashboard = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Student Name</TableHead>
-                  <TableHead className="text-center">Games Played</TableHead>
+                  <TableHead className="text-center">Games</TableHead>
                   <TableHead className="text-center">Total Score</TableHead>
                   <TableHead className="text-center">Avg Score</TableHead>
                   <TableHead className="text-center">Max Streak</TableHead>
+                  <TableHead className="text-center">Badges</TableHead>
+                  <TableHead className="text-center">Perfect Games</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {users.map((user) => {
                   const stats = getStudentStats(user.uid!);
+                  const achievementCount = userAchievements[user.uid!] || 0;
                   return (
                     <TableRow key={user.uid}>
                       <TableCell className="font-medium">{user.displayName}</TableCell>
@@ -129,12 +148,21 @@ const TeacherDashboard = () => {
                       <TableCell className="text-center">
                         <Badge variant="secondary">{stats.maxStreak}</Badge>
                       </TableCell>
+                      <TableCell className="text-center">
+                        <div className="flex items-center justify-center gap-1">
+                          <Award className="w-4 h-4 text-secondary" />
+                          <span className="font-semibold">{achievementCount}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Badge className="bg-primary">{stats.perfectGames}</Badge>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
                 {users.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                       No students yet
                     </TableCell>
                   </TableRow>

@@ -14,10 +14,27 @@ interface GameOverScreenProps {
   score: number;
   maxStreak: number;
   difficulty: Difficulty;
+  totalQuestions: number;
+  correctAnswers: number;
+  wrongAnswers: number;
+  completionTimeSeconds: number;
+  isPerfectGame: boolean;
+  hadComeback: boolean;
   onRestart: () => void;
 }
 
-const GameOverScreen = ({ score, maxStreak, difficulty, onRestart }: GameOverScreenProps) => {
+const GameOverScreen = ({ 
+  score, 
+  maxStreak, 
+  difficulty, 
+  totalQuestions, 
+  correctAnswers, 
+  wrongAnswers,
+  completionTimeSeconds,
+  isPerfectGame,
+  hadComeback,
+  onRestart 
+}: GameOverScreenProps) => {
   const { toast } = useToast();
   const { user, userProfile } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
@@ -31,23 +48,39 @@ const GameOverScreen = ({ score, maxStreak, difficulty, onRestart }: GameOverScr
       if (user && userProfile && !scoreSaved) {
         setIsSaving(true);
         try {
-          // Save game session
+          // Save game session with detailed stats
           await saveGameSession({
             userId: user.uid,
             displayName: userProfile.displayName,
             difficulty,
             score,
             streak: maxStreak,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            totalQuestions,
+            correctAnswers,
+            wrongAnswers,
+            completionTimeSeconds,
+            isPerfectGame,
+            hadComeback
           });
 
-          // Check for achievements
+          // Get user sessions to calculate total correct answers
           const userSessions = await getUserSessions(user.uid);
+          const totalCorrectAnswersAllTime = userSessions.reduce(
+            (sum, session) => sum + (session.correctAnswers || 0), 
+            correctAnswers
+          );
+
+          // Check for achievements with new parameters
           const achievements = await checkAndAwardAchievements(
             user.uid,
             score,
             maxStreak,
-            userSessions.length
+            userSessions.length,
+            isPerfectGame,
+            completionTimeSeconds,
+            hadComeback,
+            totalCorrectAnswersAllTime
           );
 
           if (achievements.length > 0) {
@@ -85,7 +118,7 @@ const GameOverScreen = ({ score, maxStreak, difficulty, onRestart }: GameOverScr
     };
 
     saveAndLoadData();
-  }, [user, userProfile, score, maxStreak, difficulty, scoreSaved]);
+  }, [user, userProfile, score, maxStreak, difficulty, scoreSaved, totalQuestions, correctAnswers, wrongAnswers, completionTimeSeconds, isPerfectGame, hadComeback]);
 
   const getMessage = () => {
     if (score >= 50) return "You're a grammar master!";
