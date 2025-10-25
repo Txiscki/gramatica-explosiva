@@ -7,7 +7,8 @@ export interface Achievement {
   description: string;
   icon: string;
   requirement: number;
-  type: "score" | "streak" | "games" | "level";
+  type: "score" | "streak" | "games" | "level" | "infinite";
+  isSecret?: boolean;
 }
 
 export interface UserAchievement {
@@ -128,6 +129,52 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: "👑",
     requirement: 10,
     type: "level"
+  },
+  // Secret Achievements
+  {
+    id: "infinite_challenger",
+    name: "Infinite Challenger",
+    description: "Unlock Infinite Mode",
+    icon: "🕹️",
+    requirement: 1,
+    type: "infinite",
+    isSecret: true
+  },
+  {
+    id: "endless_genius",
+    name: "Endless Genius",
+    description: "50 correct in a row in Infinite Mode",
+    icon: "🧠",
+    requirement: 50,
+    type: "infinite",
+    isSecret: true
+  },
+  {
+    id: "no_mercy",
+    name: "No Mercy",
+    description: "100 correct in a row in Infinite Mode",
+    icon: "💀",
+    requirement: 100,
+    type: "infinite",
+    isSecret: true
+  },
+  {
+    id: "the_legend",
+    name: "The Legend",
+    description: "Score 500+ in Infinite Mode",
+    icon: "⚔️",
+    requirement: 500,
+    type: "infinite",
+    isSecret: true
+  },
+  {
+    id: "unreal_precision",
+    name: "Unreal Precision",
+    description: "Finish Infinite Mode with zero mistakes",
+    icon: "☠️",
+    requirement: 1,
+    type: "infinite",
+    isSecret: true
   }
 ];
 
@@ -166,7 +213,10 @@ export const checkAndAwardAchievements = async (
   isPerfectGame: boolean,
   completionTimeSeconds: number,
   hadComeback: boolean,
-  totalCorrectAnswersAllTime: number
+  totalCorrectAnswersAllTime: number,
+  isInfiniteMode: boolean = false,
+  infiniteModeUnlocked: boolean = false,
+  infiniteModeZeroMistakes: boolean = false
 ) => {
   const userAchievements = await getUserAchievements(userId);
   const earnedIds = userAchievements.map(ua => ua.achievementId);
@@ -181,22 +231,39 @@ export const checkAndAwardAchievements = async (
       case "score":
         if (achievement.id === "vocabulary_wizard") {
           shouldAward = totalCorrectAnswersAllTime >= achievement.requirement;
-        } else {
+        } else if (isInfiniteMode && achievement.id === "the_legend") {
+          shouldAward = score >= achievement.requirement;
+        } else if (!isInfiniteMode) {
           shouldAward = score >= achievement.requirement;
         }
         break;
       case "streak":
-        shouldAward = streak >= achievement.requirement;
+        if (isInfiniteMode && (achievement.id === "endless_genius" || achievement.id === "no_mercy")) {
+          shouldAward = streak >= achievement.requirement;
+        } else if (!isInfiniteMode) {
+          shouldAward = streak >= achievement.requirement;
+        }
         break;
       case "games":
         if (achievement.id === "perfect_game") {
-          shouldAward = isPerfectGame;
+          shouldAward = isPerfectGame && !isInfiniteMode;
         } else if (achievement.id === "speedster") {
-          shouldAward = completionTimeSeconds <= 300; // 5 minutes
+          shouldAward = completionTimeSeconds <= 300 && !isInfiniteMode;
         } else if (achievement.id === "comeback") {
-          shouldAward = hadComeback;
+          shouldAward = hadComeback && !isInfiniteMode;
         } else {
-          shouldAward = gameCount >= achievement.requirement;
+          shouldAward = gameCount >= achievement.requirement && !isInfiniteMode;
+        }
+        break;
+      case "infinite":
+        if (achievement.id === "infinite_challenger") {
+          shouldAward = infiniteModeUnlocked;
+        } else if (achievement.id === "unreal_precision") {
+          shouldAward = isInfiniteMode && infiniteModeZeroMistakes;
+        } else if (achievement.id === "endless_genius" || achievement.id === "no_mercy") {
+          shouldAward = isInfiniteMode && streak >= achievement.requirement;
+        } else if (achievement.id === "the_legend") {
+          shouldAward = isInfiniteMode && score >= achievement.requirement;
         }
         break;
     }

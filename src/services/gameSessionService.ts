@@ -15,6 +15,7 @@ export interface GameSession {
   completionTimeSeconds: number;
   isPerfectGame: boolean;
   hadComeback: boolean;
+  isInfiniteMode?: boolean;
 }
 
 export const saveGameSession = async (session: GameSession) => {

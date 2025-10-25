@@ -1,23 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, LayoutDashboard } from "lucide-react";
+import { LogOut, LayoutDashboard, Infinity } from "lucide-react";
 import bombImage from "@/assets/bomb.png";
 import { Difficulty } from "@/types/game";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/services/authService";
 import BadgeDisplay from "./BadgeDisplay";
+import { getInfiniteModeProgress } from "@/services/infiniteModeService";
 
 interface StartScreenProps {
-  onStart: (difficulty: Difficulty) => void;
+  onStart: (difficulty: Difficulty, isInfiniteMode?: boolean) => void;
 }
 
 const StartScreen = ({ onStart }: StartScreenProps) => {
   const navigate = useNavigate();
-  const { user, userProfile } = useAuth();
+  const { user, userRole } = useAuth();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("b1");
+  const [infiniteUnlocked, setInfiniteUnlocked] = useState(false);
+
+  useEffect(() => {
+    const checkInfiniteMode = async () => {
+      if (user && selectedDifficulty) {
+        // Teachers always have infinite mode unlocked
+        if (userRole === "teacher") {
+          setInfiniteUnlocked(true);
+          return;
+        }
+        
+        const progress = await getInfiniteModeProgress(user.uid, selectedDifficulty);
+        setInfiniteUnlocked(progress.unlocked);
+      }
+    };
+    checkInfiniteMode();
+  }, [user, selectedDifficulty, userRole]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -65,14 +83,14 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto space-y-6">
-        {user && userProfile && (
+        {user && (
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-2xl font-bold">Welcome back, {userProfile.displayName}!</h2>
-              <p className="text-muted-foreground">Role: {userProfile.role}</p>
+              <h2 className="text-2xl font-bold">Welcome back!</h2>
+              <p className="text-muted-foreground">Role: {userRole}</p>
             </div>
             <div className="flex gap-2">
-              {userProfile.role === "teacher" && (
+              {userRole === "teacher" && (
                 <Button onClick={() => navigate("/teacher-dashboard")} variant="outline">
                   <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
@@ -138,13 +156,43 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
             </div>
           </div>
           
-          <Button
-            onClick={() => onStart(selectedDifficulty)}
-            size="lg"
-            className="w-full text-xl font-bold h-16 shadow-lg hover:scale-105 transition-transform"
-          >
-            Start Playing!
-          </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button
+              onClick={() => onStart(selectedDifficulty, false)}
+              size="lg"
+              className="w-full text-xl font-bold h-16 shadow-lg hover:scale-105 transition-transform"
+            >
+              Start Normal Mode (20 Questions)
+            </Button>
+            
+            {infiniteUnlocked ? (
+              <Button
+                onClick={() => onStart(selectedDifficulty, true)}
+                size="lg"
+                variant="secondary"
+                className="w-full text-xl font-bold h-16 shadow-lg hover:scale-105 transition-transform"
+              >
+                <Infinity className="w-6 h-6 mr-2" />
+                Infinite Mode
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                variant="outline"
+                disabled
+                className="w-full text-xl font-bold h-16 opacity-50 cursor-not-allowed"
+              >
+                <span className="text-2xl mr-2">???</span>
+                Locked Mode
+              </Button>
+            )}
+          </div>
+          
+          {!infiniteUnlocked && userRole === "student" && (
+            <p className="text-sm text-muted-foreground text-center mt-2">
+              Complete 10 normal runs at this level to unlock Infinite Mode
+            </p>
+          )}
         </CardContent>
       </Card>
       </div>

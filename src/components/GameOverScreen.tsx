@@ -20,7 +20,10 @@ interface GameOverScreenProps {
   completionTimeSeconds: number;
   isPerfectGame: boolean;
   hadComeback: boolean;
+  isInfiniteMode: boolean;
+  infiniteModeZeroMistakes: boolean;
   onRestart: () => void;
+  onBackToMenu: () => void;
 }
 
 const GameOverScreen = ({ 
@@ -33,7 +36,10 @@ const GameOverScreen = ({
   completionTimeSeconds,
   isPerfectGame,
   hadComeback,
-  onRestart 
+  isInfiniteMode,
+  infiniteModeZeroMistakes,
+  onRestart,
+  onBackToMenu
 }: GameOverScreenProps) => {
   const { toast } = useToast();
   const { user, userProfile } = useAuth();
@@ -42,6 +48,7 @@ const GameOverScreen = ({
   const [topScores, setTopScores] = useState<GameSession[]>([]);
   const [topStreaks, setTopStreaks] = useState<GameSession[]>([]);
   const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [infiniteModeUnlocked, setInfiniteModeUnlocked] = useState(false);
 
   useEffect(() => {
     const saveAndLoadData = async () => {
@@ -61,7 +68,8 @@ const GameOverScreen = ({
             wrongAnswers,
             completionTimeSeconds,
             isPerfectGame,
-            hadComeback
+            hadComeback,
+            isInfiniteMode
           });
 
           // Get user sessions to calculate total correct answers
@@ -80,13 +88,20 @@ const GameOverScreen = ({
             isPerfectGame,
             completionTimeSeconds,
             hadComeback,
-            totalCorrectAnswersAllTime
+            totalCorrectAnswersAllTime,
+            isInfiniteMode,
+            infiniteModeUnlocked,
+            infiniteModeZeroMistakes
           );
 
           if (achievements.length > 0) {
             setNewAchievements(achievements);
+            
+            // Check if any secret achievements were unlocked
+            const hasSecretAchievement = achievements.some(a => a.isSecret);
+            
             toast({
-              title: "🎉 New Achievement!",
+              title: hasSecretAchievement ? "✨ SECRET ACHIEVEMENT UNLOCKED!" : "🎉 New Achievement!",
               description: `You earned: ${achievements.map(a => a.name).join(", ")}`,
               duration: 5000,
             });
@@ -118,9 +133,15 @@ const GameOverScreen = ({
     };
 
     saveAndLoadData();
-  }, [user, userProfile, score, maxStreak, difficulty, scoreSaved, totalQuestions, correctAnswers, wrongAnswers, completionTimeSeconds, isPerfectGame, hadComeback]);
+  }, [user, userProfile, score, maxStreak, difficulty, scoreSaved, totalQuestions, correctAnswers, wrongAnswers, completionTimeSeconds, isPerfectGame, hadComeback, isInfiniteMode, infiniteModeZeroMistakes]);
 
   const getMessage = () => {
+    if (isInfiniteMode) {
+      if (score >= 500) return "LEGENDARY! Infinite Mode Mastered!";
+      if (score >= 300) return "Incredible! You're unstoppable!";
+      if (score >= 100) return "Amazing Infinite Mode run!";
+      return "Great effort in Infinite Mode!";
+    }
     if (score >= 50) return "You're a grammar master!";
     if (score >= 30) return "Great job! Keep practicing";
     if (score >= 10) return "Good try! You can do better";
@@ -135,7 +156,7 @@ const GameOverScreen = ({
             <Trophy className="w-16 h-16 text-white" />
           </div>
           <CardTitle className="text-4xl font-bold mb-2">
-            Game Over!
+            {isInfiniteMode ? "Infinite Mode Complete!" : "Game Over!"}
           </CardTitle>
           <CardDescription className="text-2xl mt-2 font-semibold text-foreground">
             {getMessage()}
@@ -167,12 +188,19 @@ const GameOverScreen = ({
 
           {newAchievements.length > 0 && (
             <div className="mb-6 space-y-2">
-              <h3 className="font-bold text-lg text-center">🎉 New Achievements!</h3>
+              <h3 className="font-bold text-lg text-center">
+                {newAchievements.some(a => a.isSecret) ? "✨ SECRET ACHIEVEMENTS UNLOCKED!" : "🎉 New Achievements!"}
+              </h3>
               <div className="grid grid-cols-2 gap-2">
                 {newAchievements.map((achievement) => (
                   <div
                     key={achievement.id}
-                    className="flex items-center gap-2 p-3 bg-secondary/10 rounded-lg border-2 border-secondary"
+                    className={`flex items-center gap-2 p-3 rounded-lg border-2 ${
+                      achievement.isSecret
+                        ? "bg-gradient-to-br from-accent/20 to-primary/20 border-accent animate-pulse"
+                        : "bg-secondary/10 border-secondary"
+                    }`}
+                    style={achievement.isSecret ? { animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" } : undefined}
                   >
                     <span className="text-2xl">{achievement.icon}</span>
                     <div>
@@ -185,15 +213,26 @@ const GameOverScreen = ({
             </div>
           )}
 
-          <Button
-            onClick={onRestart}
-            size="lg"
-            variant="outline"
-            className="w-full text-xl font-bold h-16 shadow-lg hover:scale-105 transition-transform"
-          >
-            <RotateCcw className="w-6 h-6 mr-2" />
-            Play Again
-          </Button>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Button
+              onClick={onRestart}
+              size="lg"
+              variant="default"
+              className="text-lg font-bold h-14 shadow-lg hover:scale-105 transition-transform"
+            >
+              <RotateCcw className="w-5 h-5 mr-2" />
+              Play Again
+            </Button>
+            
+            <Button
+              onClick={onBackToMenu}
+              size="lg"
+              variant="outline"
+              className="text-lg font-bold h-14 shadow-lg hover:scale-105 transition-transform"
+            >
+              Return to Menu
+            </Button>
+          </div>
 
           <Leaderboard 
             scores={topScores} 

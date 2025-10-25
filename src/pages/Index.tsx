@@ -9,8 +9,11 @@ import StartScreen from "@/components/StartScreen";
 import GameOverScreen from "@/components/GameOverScreen";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { incrementNormalRunsCompleted } from "@/services/infiniteModeService";
 
 const INITIAL_TIME = 20;
+const NORMAL_MODE_QUESTIONS = 20;
+const INFINITE_MODE_MAX_FAILS = 3;
 
 const Index = () => {
   const navigate = useNavigate();
@@ -31,6 +34,8 @@ const Index = () => {
     timeLeft: INITIAL_TIME,
     isPlaying: false,
     isGameOver: false,
+    isInfiniteMode: false,
+    failsRemaining: INFINITE_MODE_MAX_FAILS,
   });
 
   const [usedQuestions, setUsedQuestions] = useState<string[]>([]);
@@ -58,7 +63,7 @@ const Index = () => {
     return nextQuestion;
   };
 
-  const startGame = (difficulty: Difficulty) => {
+  const startGame = (difficulty: Difficulty, isInfiniteMode: boolean = false) => {
     setSelectedDifficulty(difficulty);
     setUsedQuestions([]);
     setIsPaused(false);
@@ -81,6 +86,8 @@ const Index = () => {
       timeLeft: INITIAL_TIME,
       isPlaying: true,
       isGameOver: false,
+      isInfiniteMode,
+      failsRemaining: isInfiniteMode ? INFINITE_MODE_MAX_FAILS : undefined,
     });
   };
 
@@ -95,14 +102,26 @@ const Index = () => {
       const points = 10 + (streakBonus * 2);
       const newMaxStreak = Math.max(gameState.maxStreak, streakBonus);
       
+      // Check if normal mode is complete (20 questions)
+      const isNormalModeComplete = !gameState.isInfiniteMode && totalQuestionsAnswered + 1 >= NORMAL_MODE_QUESTIONS;
+      
       setGameState(prev => ({
         ...prev,
         score: prev.score + points,
         streak: streakBonus,
         maxStreak: newMaxStreak,
-        currentQuestion: getNextQuestion(),
+        currentQuestion: isNormalModeComplete ? null : getNextQuestion(),
         timeLeft: INITIAL_TIME,
+        isGameOver: isNormalModeComplete,
+        isPlaying: !isNormalModeComplete,
       }));
+      
+      if (isNormalModeComplete) {
+        // Increment normal runs for infinite mode unlock
+        if (user) {
+          incrementNormalRunsCompleted(user.uid, selectedDifficulty);
+        }
+      }
 
       toast({
         title: "Correct!",
@@ -115,14 +134,53 @@ const Index = () => {
       setConsecutiveWrong(newConsecutiveWrong);
       setMaxConsecutiveWrong(prev => Math.max(prev, newConsecutiveWrong));
       
+      // Handle infinite mode failures
+      if (gameState.isInfiniteMode) {
+        const newFailsRemaining = (gameState.failsRemaining || INFINITE_MODE_MAX_FAILS) - 1;
+        
+        if (newFailsRemaining <= 0) {
+          // Game over in infinite mode
+          setGameState(prev => ({
+            ...prev,
+            streak: 0,
+            failsRemaining: 0,
+            isPlaying: false,
+            isGameOver: true,
+          }));
+          
+          toast({
+            title: "💥 Game Over!",
+            description: "You've used all your chances in Infinite Mode",
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
+        }
+        
+        setGameState(prev => ({
+          ...prev,
+          streak: 0,
+          failsRemaining: newFailsRemaining,
+        }));
+        
+        toast({
+          title: "Wrong!",
+          description: `Fails remaining: ${newFailsRemaining}`,
+          variant: "destructive",
+          duration: 2000,
+        });
+      }
+      
       // Pause timer when answer is wrong
       setIsPaused(true);
       
       // Reset streak immediately
-      setGameState(prev => ({
-        ...prev,
-        streak: 0,
-      }));
+      if (!gameState.isInfiniteMode) {
+        setGameState(prev => ({
+          ...prev,
+          streak: 0,
+        }));
+      }
     }
   };
 
@@ -185,8 +243,13 @@ const Index = () => {
 
   if (gameState.isGameOver) {
     const completionTimeSeconds = Math.floor((Date.now() - gameStartTime) / 1000);
-    const isPerfectGame = wrongAnswersCount === 0 && totalQuestionsAnswered > 0;
+    // Perfect game: all questions correct and exactly 20 questions in normal mode
+    const isPerfectGame = !gameState.isInfiniteMode && 
+                          wrongAnswersCount === 0 && 
+                          totalQuestionsAnswered === NORMAL_MODE_QUESTIONS &&
+                          correctAnswersCount === NORMAL_MODE_QUESTIONS;
     const hadComeback = maxConsecutiveWrong >= 3 && totalQuestionsAnswered > 0;
+    const infiniteModeZeroMistakes = gameState.isInfiniteMode && wrongAnswersCount === 0;
     
     return (
       <GameOverScreen 
@@ -199,14 +262,29 @@ const Index = () => {
         completionTimeSeconds={completionTimeSeconds}
         isPerfectGame={isPerfectGame}
         hadComeback={hadComeback}
-        onRestart={() => startGame(selectedDifficulty)} 
+        isInfiniteMode={gameState.isInfiniteMode || false}
+        infiniteModeZeroMistakes={infiniteModeZeroMistakes}
+        onRestart={() => startGame(selectedDifficulty, gameState.isInfiniteMode)} 
+        onBackToMenu={() => {
+          setGameState(prev => ({
+            ...prev,
+            isPlaying: false,
+            isGameOver: false,
+          }));
+        }}
       />
     );
   }
 
   return (
     <div className="min-h-screen bg-[image:var(--gradient-background)] p-4 flex flex-col items-center justify-center">
-      <GameStats score={gameState.score} streak={gameState.streak} />
+      <GameStats 
+        score={gameState.score} 
+        streak={gameState.streak}
+        failsRemaining={gameState.isInfiniteMode ? gameState.failsRemaining : undefined}
+        questionsAnswered={!gameState.isInfiniteMode ? totalQuestionsAnswered : undefined}
+        totalQuestions={!gameState.isInfiniteMode ? NORMAL_MODE_QUESTIONS : undefined}
+      />
       
       <BombTimer
         timeLeft={gameState.timeLeft}

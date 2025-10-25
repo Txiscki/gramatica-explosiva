@@ -16,4 +16,6 @@ export interface GameState {
   timeLeft: number;
   isPlaying: boolean;
   isGameOver: boolean;
+  isInfiniteMode?: boolean;
+  failsRemaining?: number;
 }

@@ -12,14 +12,14 @@ import { getUserAchievements, ACHIEVEMENTS } from "@/services/achievementService
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
-  const { userProfile } = useAuth();
+  const { userRole } = useAuth();
   const [sessions, setSessions] = useState<GameSession[]>([]);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [userAchievements, setUserAchievements] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    if (userProfile?.role !== "teacher") {
+    if (userRole !== "teacher") {
       navigate("/");
       return;
     }
@@ -30,15 +30,15 @@ const TeacherDashboard = () => {
         getAllUsers()
       ]);
       setSessions(sessionsData);
-      const students = usersData.filter(u => u.role === "student");
-      setUsers(students);
+      // All users are shown (role is in separate table)
+      setUsers(usersData);
       
-      // Load achievements for each student
+      // Load achievements for each user
       const achievementCounts: Record<string, number> = {};
-      for (const student of students) {
-        if (student.uid) {
-          const achievements = await getUserAchievements(student.uid);
-          achievementCounts[student.uid] = achievements.length;
+      for (const user of usersData) {
+        if (user.uid) {
+          const achievements = await getUserAchievements(user.uid);
+          achievementCounts[user.uid] = achievements.length;
         }
       }
       setUserAchievements(achievementCounts);
@@ -47,7 +47,7 @@ const TeacherDashboard = () => {
     };
 
     loadData();
-  }, [userProfile, navigate]);
+  }, [userRole, navigate]);
 
   const getStudentStats = (userId: string) => {
     const studentSessions = sessions.filter(s => s.userId === userId);
