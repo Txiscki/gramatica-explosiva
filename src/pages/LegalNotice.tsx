@@ -74,7 +74,7 @@ const LegalNotice = () => {
                 <h3 className="text-xl font-semibold mt-6">📜 Contacto</h3>
                 <p>
                   Para cualquier cuestión relacionada con los derechos de autor, errores o solicitudes de colaboración, puedes contactar con el autor 
-                  a través del correo electrónico <strong>fmgcp12@gmail.com</strong>.
+                  a través del correo electrónico <strong>fmgcp12[@]gmail[punto]com</strong>.
                 </p>
               </div>
             </section>
@@ -134,7 +134,7 @@ const LegalNotice = () => {
                 <h3 className="text-xl font-semibold mt-6">📜 Contact</h3>
                 <p>
                   For copyright inquiries, error reports, or collaboration requests, please contact the author via email{" "}
-                  <strong>fmgcp12@gmail.com</strong>.
+                  <strong>fmgcp12[@]gmail[dot]com</strong>.
                 </p>
               </div>
             </section>
