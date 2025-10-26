@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, signInWithEmail, signInWithGoogle } from "@/services/authService";
 import bombImage from "@/assets/bomb.png";
+import Footer from "@/components/Footer";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -90,7 +91,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 flex items-center justify-center p-4">
       <Card className="max-w-md w-full shadow-2xl">
         <CardHeader className="text-center">
           <img
@@ -220,6 +222,8 @@ const Auth = () => {
           </Button>
         </CardContent>
       </Card>
+      </div>
+      <Footer />
     </div>
   );
 };

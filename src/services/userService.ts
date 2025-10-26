@@ -5,6 +5,9 @@ export interface UserProfile {
   uid?: string;
   email: string;
   displayName: string;
+  organizationId?: string;
+  classGroup?: string;
+  favoriteStudents?: string[];
   createdAt?: number;
 }
 

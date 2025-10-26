@@ -9,10 +9,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getAllSessions, GameSession } from "@/services/gameSessionService";
 import { getAllUsers, UserProfile } from "@/services/userService";
 import { getUserAchievements, ACHIEVEMENTS } from "@/services/achievementService";
+import Footer from "@/components/Footer";
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
-  const { userRole } = useAuth();
+  const { userRole, userProfile, user } = useAuth();
   const [sessions, setSessions] = useState<GameSession[]>([]);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,9 +30,30 @@ const TeacherDashboard = () => {
         getAllSessions(),
         getAllUsers()
       ]);
-      setSessions(sessionsData);
-      // All users are shown (role is in separate table)
-      setUsers(usersData);
+      
+      // Filter students based on teacher's organization and favorites
+      const filteredUsers = usersData.filter(u => {
+        if (!u.uid || u.uid === user?.uid) return false;
+        
+        // Show students from same organization
+        if (userProfile?.organizationId && u.organizationId === userProfile.organizationId) {
+          return true;
+        }
+        
+        // Show favorite students
+        if (userProfile?.favoriteStudents?.includes(u.uid)) {
+          return true;
+        }
+        
+        return false;
+      });
+      
+      // Filter sessions to only show relevant students
+      const studentIds = filteredUsers.map(u => u.uid);
+      const filteredSessions = sessionsData.filter(s => studentIds.includes(s.userId));
+      
+      setSessions(filteredSessions);
+      setUsers(filteredUsers);
       
       // Load achievements for each user
       const achievementCounts: Record<string, number> = {};
@@ -47,7 +69,7 @@ const TeacherDashboard = () => {
     };
 
     loadData();
-  }, [userRole, navigate]);
+  }, [userRole, navigate, user, userProfile]);
 
   const getStudentStats = (userId: string) => {
     const studentSessions = sessions.filter(s => s.userId === userId);
@@ -78,8 +100,9 @@ const TeacherDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 p-4 md:p-8">
+        <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
           <Button variant="outline" onClick={() => navigate("/")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -223,7 +246,9 @@ const TeacherDashboard = () => {
             </Table>
           </CardContent>
         </Card>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

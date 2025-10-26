@@ -9,6 +9,7 @@ import { Difficulty } from "@/types/game";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/services/authService";
 import BadgeDisplay from "./BadgeDisplay";
+import Footer from "./Footer";
 import { getInfiniteModeProgress } from "@/services/infiniteModeService";
 
 interface StartScreenProps {
@@ -81,8 +82,9 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
   ];
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1 p-4">
+        <div className="max-w-6xl mx-auto space-y-6">
         {user && (
           <div className="flex justify-between items-center">
             <div>
@@ -195,7 +197,9 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
           )}
         </CardContent>
       </Card>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -27,6 +27,14 @@ export const ACHIEVEMENTS: Achievement[] = [
     type: "games"
   },
   {
+    id: "quiz_veteran",
+    name: "Quiz Veteran",
+    description: "Complete 50 games",
+    icon: "🧠",
+    requirement: 50,
+    type: "games"
+  },
+  {
     id: "perfect_game",
     name: "Perfect Game",
     description: "Answer all questions correctly in a single game",
@@ -141,6 +149,15 @@ export const ACHIEVEMENTS: Achievement[] = [
     isSecret: true
   },
   {
+    id: "infinite_explorer",
+    name: "Infinite Explorer",
+    description: "Unlock infinite mode for any level",
+    icon: "🗺️",
+    requirement: 1,
+    type: "infinite",
+    isSecret: true
+  },
+  {
     id: "endless_genius",
     name: "Endless Genius",
     description: "50 correct in a row in Infinite Mode",
@@ -173,6 +190,15 @@ export const ACHIEVEMENTS: Achievement[] = [
     description: "Finish Infinite Mode with zero mistakes",
     icon: "☠️",
     requirement: 1,
+    type: "infinite",
+    isSecret: true
+  },
+  {
+    id: "secret_genius",
+    name: "Secret Genius",
+    description: "Score 1500+ points in Infinite Mode",
+    icon: "👀",
+    requirement: 1500,
     type: "infinite",
     isSecret: true
   }
@@ -264,6 +290,23 @@ export const checkAndAwardAchievements = async (
           shouldAward = isInfiniteMode && streak >= achievement.requirement;
         } else if (achievement.id === "the_legend") {
           shouldAward = isInfiniteMode && score >= achievement.requirement;
+        } else if (achievement.id === "infinite_explorer") {
+          shouldAward = infiniteModeUnlocked;
+        } else if (achievement.id === "secret_genius") {
+          shouldAward = isInfiniteMode && score >= achievement.requirement;
+        }
+        break;
+      case "games":
+        if (achievement.id === "perfect_game") {
+          shouldAward = isPerfectGame && !isInfiniteMode;
+        } else if (achievement.id === "speedster") {
+          shouldAward = completionTimeSeconds <= 300 && !isInfiniteMode;
+        } else if (achievement.id === "comeback") {
+          shouldAward = hadComeback && !isInfiniteMode;
+        } else if (achievement.id === "quiz_veteran") {
+          shouldAward = gameCount >= achievement.requirement && !isInfiniteMode;
+        } else {
+          shouldAward = gameCount >= achievement.requirement && !isInfiniteMode;
         }
         break;
     }
