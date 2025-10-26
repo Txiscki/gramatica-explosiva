@@ -162,7 +162,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     name: "Endless Genius",
     description: "50 correct in a row in Infinite Mode",
     icon: "🧠",
-    requirement: 50,
+    requirement: 2,
     type: "infinite",
     isSecret: true
   },
