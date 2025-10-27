@@ -31,8 +31,7 @@ export const createUserProfile = async (uid: string, profile: Omit<UserProfile, 
       createdAt: Date.now()
     });
   } catch (error) {
-    console.error("Error creating user profile:", error);
-    throw error;
+    throw new Error("Unable to create user profile");
   }
 };
 
@@ -61,7 +60,6 @@ export const getUsersByOrganization = async (organizationId: string): Promise<Us
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as UserProfile);
   } catch (error) {
-    console.error("Error getting users by organization:", error);
     return [];
   }
 };
@@ -89,7 +87,6 @@ export const getUsersByIds = async (userIds: string[]): Promise<UserProfile[]> =
     
     return results.flat();
   } catch (error) {
-    console.error("Error getting users by IDs:", error);
     return [];
   }
 };

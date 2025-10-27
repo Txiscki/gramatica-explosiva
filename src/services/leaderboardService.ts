@@ -20,8 +20,7 @@ export const saveHighScore = async (name: string, score: number) => {
     
     await addDoc(collection(db, "leaderboards_highscore"), validatedEntry);
   } catch (error) {
-    console.error("Error saving high score:", error);
-    throw error;
+    throw new Error("Unable to save high score");
   }
 };
 
@@ -36,8 +35,7 @@ export const saveHighStreak = async (name: string, streak: number) => {
     
     await addDoc(collection(db, "leaderboards_streak"), validatedEntry);
   } catch (error) {
-    console.error("Error saving high streak:", error);
-    throw error;
+    throw new Error("Unable to save high streak");
   }
 };
 
@@ -51,7 +49,6 @@ export const getTopScores = async (limitCount: number = 10): Promise<Leaderboard
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as LeaderboardEntry);
   } catch (error) {
-    console.error("Error getting top scores:", error);
     return [];
   }
 };
@@ -66,7 +63,6 @@ export const getTopStreaks = async (limitCount: number = 10): Promise<Leaderboar
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as LeaderboardEntry);
   } catch (error) {
-    console.error("Error getting top streaks:", error);
     return [];
   }
 };

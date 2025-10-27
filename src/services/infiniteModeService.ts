@@ -35,7 +35,6 @@ export const getInfiniteModeProgress = async (
       bestStreak: 0,
     };
   } catch (error) {
-    console.error("Error getting infinite mode progress:", error);
     return {
       userId,
       difficulty,
@@ -75,7 +74,7 @@ export const incrementNormalRunsCompleted = async (
       });
     }
   } catch (error) {
-    console.error("Error incrementing normal runs:", error);
+    // Silently fail - progress tracking is not critical
   }
 };
 
@@ -106,6 +105,6 @@ export const updateInfiniteModeStats = async (
       { merge: true }
     );
   } catch (error) {
-    console.error("Error updating infinite mode stats:", error);
+    // Silently fail - stats tracking is not critical
   }
 };

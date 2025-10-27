@@ -17,8 +17,7 @@ export const createOrganization = async (name: string, ownerId: string): Promise
     });
     return docRef.id;
   } catch (error) {
-    console.error("Error creating organization:", error);
-    throw error;
+    throw new Error("Unable to create organization");
   }
 };
 
@@ -32,7 +31,6 @@ export const getOrganization = async (organizationId: string): Promise<Organizat
     }
     return null;
   } catch (error) {
-    console.error("Error getting organization:", error);
     return null;
   }
 };
@@ -43,7 +41,6 @@ export const getUserOrganizations = async (userId: string): Promise<Organization
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Organization));
   } catch (error) {
-    console.error("Error getting user organizations:", error);
     return [];
   }
 };

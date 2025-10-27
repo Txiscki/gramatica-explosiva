@@ -26,8 +26,7 @@ export const saveGameSession = async (session: GameSession) => {
     
     await addDoc(collection(db, "game_sessions"), validatedSession);
   } catch (error) {
-    console.error("Error saving game session:", error);
-    throw error;
+    throw new Error("Unable to save game session");
   }
 };
 
@@ -42,7 +41,6 @@ export const getUserSessions = async (userId: string): Promise<GameSession[]> =>
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
-    console.error("Error getting user sessions:", error);
     return [];
   }
 };
@@ -58,7 +56,6 @@ export const getTopScoresByLevel = async (difficulty: Difficulty, limitCount: nu
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
-    console.error("Error getting top scores by level:", error);
     return [];
   }
 };
@@ -74,7 +71,6 @@ export const getTopStreaksByLevel = async (difficulty: Difficulty, limitCount: n
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
-    console.error("Error getting top streaks by level:", error);
     return [];
   }
 };
@@ -89,7 +85,6 @@ export const getAllSessions = async (): Promise<GameSession[]> => {
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
-    console.error("Error getting all sessions:", error);
     return [];
   }
 };
@@ -119,7 +114,6 @@ export const getSessionsByUserIds = async (userIds: string[]): Promise<GameSessi
     
     return results.flat().sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
-    console.error("Error getting sessions by user IDs:", error);
     return [];
   }
 };

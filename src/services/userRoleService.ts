@@ -24,8 +24,7 @@ export const createUserRole = async (userId: string, role: AppRole = "student") 
       createdAt: Date.now()
     });
   } catch (error) {
-    console.error("Error creating user role:", error);
-    throw error;
+    throw new Error("Unable to create user role");
   }
 };
 
@@ -39,7 +38,6 @@ export const getUserRole = async (userId: string): Promise<AppRole> => {
     }
     return "student"; // Default role
   } catch (error) {
-    console.error("Error getting user role:", error);
     return "student";
   }
 };
@@ -53,7 +51,6 @@ export const getAllUserRoles = async (): Promise<UserRole[]> => {
       ...doc.data()
     } as UserRole));
   } catch (error) {
-    console.error("Error getting all user roles:", error);
     return [];
   }
 };

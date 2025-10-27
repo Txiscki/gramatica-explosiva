@@ -217,7 +217,7 @@ export const saveUserAchievement = async (userId: string, achievementId: string)
     const achievementRef = doc(db, "user_achievements", `${userId}_${achievementId}`);
     await setDoc(achievementRef, validatedAchievement);
   } catch (error) {
-    console.error("Error saving achievement:", error);
+    // Silently fail - achievement saving is not critical
   }
 };
 
@@ -230,7 +230,6 @@ export const getUserAchievements = async (userId: string): Promise<UserAchieveme
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as UserAchievement);
   } catch (error) {
-    console.error("Error getting user achievements:", error);
     return [];
   }
 };

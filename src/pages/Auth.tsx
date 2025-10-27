@@ -44,7 +44,7 @@ const Auth = () => {
     } catch (error: any) {
       toast({
         title: "Sign up failed",
-        description: error.message || "Please check your input and try again",
+        description: "Unable to create account. Please check your email and password meet the requirements.",
         variant: "destructive",
       });
     } finally {
@@ -69,7 +69,7 @@ const Auth = () => {
     } catch (error: any) {
       toast({
         title: "Sign in failed",
-        description: error.message || "Please check your credentials and try again",
+        description: "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
