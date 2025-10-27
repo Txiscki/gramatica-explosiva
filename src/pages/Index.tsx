@@ -72,7 +72,6 @@ const Index = () => {
 
   const startGame = useCallback((difficulty: Difficulty, isInfiniteMode: boolean = false) => {
     setSelectedDifficulty(difficulty);
-    setUsedQuestions([]);
     setIsPaused(false);
     setGameStartTime(Date.now());
     setCorrectAnswersCount(0);
@@ -84,6 +83,9 @@ const Index = () => {
     const difficultyQuestions = sampleQuestions.filter(q => q.difficulty === difficulty);
     const shuffled = [...difficultyQuestions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
+    
+    // Mark the first question as used immediately
+    setUsedQuestions([shuffled[0].id]);
     
     setGameState({
       score: 0,
