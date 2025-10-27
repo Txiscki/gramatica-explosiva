@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, query, orderBy, limit, getDocs } from "firebase/firestore";
+import { leaderboardEntrySchema } from "@/lib/validation";
 
 export interface LeaderboardEntry {
   name: string;
@@ -10,11 +11,14 @@ export interface LeaderboardEntry {
 
 export const saveHighScore = async (name: string, score: number) => {
   try {
-    await addDoc(collection(db, "leaderboards_highscore"), {
+    // Validate leaderboard entry
+    const validatedEntry = leaderboardEntrySchema.parse({
       name,
       score,
       timestamp: Date.now()
     });
+    
+    await addDoc(collection(db, "leaderboards_highscore"), validatedEntry);
   } catch (error) {
     console.error("Error saving high score:", error);
     throw error;
@@ -23,11 +27,14 @@ export const saveHighScore = async (name: string, score: number) => {
 
 export const saveHighStreak = async (name: string, streak: number) => {
   try {
-    await addDoc(collection(db, "leaderboards_streak"), {
+    // Validate leaderboard entry
+    const validatedEntry = leaderboardEntrySchema.parse({
       name,
       streak,
       timestamp: Date.now()
     });
+    
+    await addDoc(collection(db, "leaderboards_streak"), validatedEntry);
   } catch (error) {
     console.error("Error saving high streak:", error);
     throw error;

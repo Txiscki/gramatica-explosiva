@@ -1,6 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import { Difficulty } from "@/types/game";
+import { gameSessionSchema } from "@/lib/validation";
 
 export interface GameSession {
   userId: string;
@@ -20,7 +21,10 @@ export interface GameSession {
 
 export const saveGameSession = async (session: GameSession) => {
   try {
-    await addDoc(collection(db, "game_sessions"), session);
+    // Validate session data
+    const validatedSession = gameSessionSchema.parse(session);
+    
+    await addDoc(collection(db, "game_sessions"), validatedSession);
   } catch (error) {
     console.error("Error saving game session:", error);
     throw error;

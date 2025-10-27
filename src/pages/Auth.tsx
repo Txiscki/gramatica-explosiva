@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { signUpWithEmail, signInWithEmail, signInWithGoogle } from "@/services/authService";
 import bombImage from "@/assets/bomb.png";
 import Footer from "@/components/Footer";
+import { signUpSchema, signInSchema } from "@/lib/validation";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -31,7 +32,10 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      await signUpWithEmail(signUpData.email, signUpData.password, signUpData.displayName);
+      // Validate input data
+      const validatedData = signUpSchema.parse(signUpData);
+      
+      await signUpWithEmail(validatedData.email, validatedData.password, validatedData.displayName);
       toast({
         title: "Account created!",
         description: "Welcome to The Grammar Bomb!",
@@ -40,7 +44,7 @@ const Auth = () => {
     } catch (error: any) {
       toast({
         title: "Sign up failed",
-        description: error.message,
+        description: error.message || "Please check your input and try again",
         variant: "destructive",
       });
     } finally {
@@ -53,7 +57,10 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      await signInWithEmail(signInData.email, signInData.password);
+      // Validate input data
+      const validatedData = signInSchema.parse(signInData);
+      
+      await signInWithEmail(validatedData.email, validatedData.password);
       toast({
         title: "Welcome back!",
         description: "Successfully signed in",
@@ -62,7 +69,7 @@ const Auth = () => {
     } catch (error: any) {
       toast({
         title: "Sign in failed",
-        description: error.message,
+        description: error.message || "Please check your credentials and try again",
         variant: "destructive",
       });
     } finally {
@@ -82,7 +89,7 @@ const Auth = () => {
     } catch (error: any) {
       toast({
         title: "Google sign in failed",
-        description: error.message,
+        description: "Unable to sign in with Google. Please try again.",
         variant: "destructive",
       });
     } finally {

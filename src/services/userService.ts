@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase";
 import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
+import { userProfileSchema } from "@/lib/validation";
 
 export interface UserProfile {
   uid?: string;
@@ -13,6 +14,9 @@ export interface UserProfile {
 
 export const createUserProfile = async (uid: string, profile: Omit<UserProfile, "uid" | "createdAt">) => {
   try {
+    // Validate profile data
+    const validatedProfile = userProfileSchema.parse(profile);
+    
     const userRef = doc(db, "users", uid);
     
     // Check if profile already exists
@@ -22,7 +26,7 @@ export const createUserProfile = async (uid: string, profile: Omit<UserProfile, 
     }
     
     await setDoc(userRef, {
-      ...profile,
+      ...validatedProfile,
       uid,
       createdAt: Date.now()
     });

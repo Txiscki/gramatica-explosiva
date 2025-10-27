@@ -1,5 +1,6 @@
 import { db } from "@/lib/firebase";
 import { collection, addDoc, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import { userAchievementSchema } from "@/lib/validation";
 
 export interface Achievement {
   id: string;
@@ -206,12 +207,15 @@ export const ACHIEVEMENTS: Achievement[] = [
 
 export const saveUserAchievement = async (userId: string, achievementId: string) => {
   try {
-    const achievementRef = doc(db, "user_achievements", `${userId}_${achievementId}`);
-    await setDoc(achievementRef, {
+    // Validate achievement data
+    const validatedAchievement = userAchievementSchema.parse({
       userId,
       achievementId,
       earnedAt: Date.now()
     });
+    
+    const achievementRef = doc(db, "user_achievements", `${userId}_${achievementId}`);
+    await setDoc(achievementRef, validatedAchievement);
   } catch (error) {
     console.error("Error saving achievement:", error);
   }
