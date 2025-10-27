@@ -24,7 +24,7 @@ const LegalNotice = () => {
               
               <div className="space-y-4">
                 <p className="text-lg">
-                  <strong>Explosive Grammar © 2025</strong> — Todos los derechos reservados.
+                  <strong>The Grammar Bomb © 2025</strong> — Todos los derechos reservados.
                 </p>
                 
                 <p>
@@ -39,7 +39,7 @@ const LegalNotice = () => {
 
                 <h3 className="text-xl font-semibold mt-6">🧑‍💻 Autoría</h3>
                 <p>
-                  Desarrollado y diseñado por <strong>Txiscki</strong>, creador de Explosive Grammar — una plataforma educativa para practicar inglés 
+                  Desarrollado y diseñado por <strong>Txiscki</strong>, creador de The Grammar Bomb — una plataforma educativa para practicar inglés 
                   mediante preguntas interactivas por niveles.
                 </p>
                 <p>
@@ -68,7 +68,7 @@ const LegalNotice = () => {
                   Se permite compartir o mostrar el proyecto con fines educativos, siempre que se cite expresamente la fuente:
                 </p>
                 <p className="italic pl-4 border-l-4 border-primary">
-                  "Explosive Grammar – desarrollado por Txiscki."
+                  "The Grammar Bomb – desarrollado por Txiscki."
                 </p>
 
                 <h3 className="text-xl font-semibold mt-6">📜 Contacto</h3>
@@ -85,7 +85,7 @@ const LegalNotice = () => {
               
               <div className="space-y-4">
                 <p className="text-lg">
-                  <strong>Explosive Grammar © 2025</strong> — All rights reserved.
+                  <strong>The Grammar Bomb © 2025</strong> — All rights reserved.
                 </p>
                 
                 <p>
@@ -100,7 +100,7 @@ const LegalNotice = () => {
 
                 <h3 className="text-xl font-semibold mt-6">🧑‍💻 Author</h3>
                 <p>
-                  Developed and designed by <strong>Txiscki</strong>, creator of Explosive Grammar — an educational platform to practice English through 
+                  Developed and designed by <strong>Txiscki</strong>, creator of The Grammar Bomb — an educational platform to practice English through 
                   interactive level-based quizzes.
                 </p>
                 <p>
@@ -128,7 +128,7 @@ const LegalNotice = () => {
                   Sharing or showcasing this project for educational purposes is allowed, as long as the following credit is included:
                 </p>
                 <p className="italic pl-4 border-l-4 border-primary">
-                  "Explosive Grammar – developed by Txiscki."
+                  "The Grammar Bomb – developed by Txiscki."
                 </p>
 
                 <h3 className="text-xl font-semibold mt-6">📜 Contact</h3>
