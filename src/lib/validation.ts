@@ -25,7 +25,7 @@ export const userProfileSchema = z.object({
 export const gameSessionSchema = z.object({
   userId: z.string().max(128),
   displayName: z.string().trim().min(1).max(100),
-  difficulty: z.enum(["easy", "medium", "hard"]),
+  difficulty: z.enum(["a2", "b1", "b2", "c1", "c2"]),
   score: z.number().int().min(0).max(1000000),
   streak: z.number().int().min(0).max(10000),
   timestamp: z.number().int().positive(),

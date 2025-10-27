@@ -53,15 +53,22 @@ const Index = () => {
       q => !usedQuestions.includes(q.id)
     );
     
+    // In infinite mode, reset questions when running out
+    // In normal mode, never reset (game ends at 20 questions anyway)
     if (availableQuestions.length === 0) {
-      setUsedQuestions([]);
+      if (gameState.isInfiniteMode) {
+        setUsedQuestions([]);
+        return shuffledQuestions[0];
+      }
+      // If no questions available and not infinite mode, return the first one
+      // (this shouldn't happen in normal mode as game ends at 20 questions)
       return shuffledQuestions[0];
     }
     
     const nextQuestion = availableQuestions[0];
     setUsedQuestions(prev => [...prev, nextQuestion.id]);
     return nextQuestion;
-  }, [shuffledQuestions, usedQuestions]);
+  }, [shuffledQuestions, usedQuestions, gameState.isInfiniteMode]);
 
   const startGame = useCallback((difficulty: Difficulty, isInfiniteMode: boolean = false) => {
     setSelectedDifficulty(difficulty);
