@@ -209,7 +209,7 @@ export const sampleQuestions: Question[] = [
 {
   id: "a2_30",
   question: "Choose: He ___ play the guitar (can/can’t)",
-  answers: ["can", "Can", "CAN"],
+  answers: ["can", "Can", "CAN", "can't", "Can't", "CAN'T"],
   category: "Grammar",
   difficulty: "a2"
 },
