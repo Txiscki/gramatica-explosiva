@@ -6,9 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, TrendingUp, Trophy, Award } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { getAllSessions, GameSession } from "@/services/gameSessionService";
-import { getAllUsers, UserProfile } from "@/services/userService";
-import { getUserAchievements, ACHIEVEMENTS } from "@/services/achievementService";
+import { getSessionsByUserIds, GameSession } from "@/services/gameSessionService";
+import { getUsersByOrganization, getUsersByIds, UserProfile } from "@/services/userService";
+import { getUserAchievements } from "@/services/achievementService";
 import Footer from "@/components/Footer";
 
 const TeacherDashboard = () => {
@@ -26,46 +26,54 @@ const TeacherDashboard = () => {
     }
 
     const loadData = async () => {
-      const [sessionsData, usersData] = await Promise.all([
-        getAllSessions(),
-        getAllUsers()
-      ]);
-      
-      // Filter students based on teacher's organization and favorites
-      const filteredUsers = usersData.filter(u => {
-        if (!u.uid || u.uid === user?.uid) return false;
+      try {
+        // Fetch only relevant users using server-side filtering
+        let relevantUsers: UserProfile[] = [];
         
-        // Show students from same organization
-        if (userProfile?.organizationId && u.organizationId === userProfile.organizationId) {
-          return true;
+        // Get users from the same organization (if organizationId exists)
+        if (userProfile?.organizationId) {
+          const orgUsers = await getUsersByOrganization(userProfile.organizationId);
+          relevantUsers = orgUsers.filter(u => u.uid && u.uid !== user?.uid);
         }
         
-        // Show favorite students
-        if (userProfile?.favoriteStudents?.includes(u.uid)) {
-          return true;
+        // Get favorite students (if any) and merge with organization users
+        if (userProfile?.favoriteStudents && userProfile.favoriteStudents.length > 0) {
+          const favoriteUsers = await getUsersByIds(userProfile.favoriteStudents);
+          // Merge and deduplicate
+          const existingUids = new Set(relevantUsers.map(u => u.uid));
+          favoriteUsers.forEach(favUser => {
+            if (favUser.uid && !existingUids.has(favUser.uid) && favUser.uid !== user?.uid) {
+              relevantUsers.push(favUser);
+              existingUids.add(favUser.uid);
+            }
+          });
         }
         
-        return false;
-      });
-      
-      // Filter sessions to only show relevant students
-      const studentIds = filteredUsers.map(u => u.uid);
-      const filteredSessions = sessionsData.filter(s => studentIds.includes(s.userId));
-      
-      setSessions(filteredSessions);
-      setUsers(filteredUsers);
-      
-      // Load achievements for each user
-      const achievementCounts: Record<string, number> = {};
-      for (const user of usersData) {
-        if (user.uid) {
-          const achievements = await getUserAchievements(user.uid);
-          achievementCounts[user.uid] = achievements.length;
+        setUsers(relevantUsers);
+        
+        // Fetch only sessions for these specific students (server-side filtering)
+        const studentIds = relevantUsers.map(u => u.uid).filter((id): id is string => !!id);
+        const relevantSessions = studentIds.length > 0 
+          ? await getSessionsByUserIds(studentIds)
+          : [];
+        
+        setSessions(relevantSessions);
+        
+        // Load achievements for each relevant user
+        const achievementCounts: Record<string, number> = {};
+        for (const user of relevantUsers) {
+          if (user.uid) {
+            const achievements = await getUserAchievements(user.uid);
+            achievementCounts[user.uid] = achievements.length;
+          }
         }
+        setUserAchievements(achievementCounts);
+        
+        setLoading(false);
+      } catch (error) {
+        console.error("Error loading teacher dashboard data:", error);
+        setLoading(false);
       }
-      setUserAchievements(achievementCounts);
-      
-      setLoading(false);
     };
 
     loadData();

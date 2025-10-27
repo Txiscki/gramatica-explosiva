@@ -93,3 +93,33 @@ export const getAllSessions = async (): Promise<GameSession[]> => {
     return [];
   }
 };
+
+export const getSessionsByUserIds = async (userIds: string[]): Promise<GameSession[]> => {
+  try {
+    if (userIds.length === 0) return [];
+    
+    // Firestore 'in' query limited to 30 items, handle in batches
+    const chunks: string[][] = [];
+    for (let i = 0; i < userIds.length; i += 30) {
+      chunks.push(userIds.slice(i, i + 30));
+    }
+    
+    const results = await Promise.all(
+      chunks.map(async (chunk) => {
+        const q = query(
+          collection(db, "game_sessions"),
+          where("userId", "in", chunk),
+          orderBy("timestamp", "desc"),
+          limit(200)
+        );
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => doc.data() as GameSession);
+      })
+    );
+    
+    return results.flat().sort((a, b) => b.timestamp - a.timestamp);
+  } catch (error) {
+    console.error("Error getting sessions by user IDs:", error);
+    return [];
+  }
+};
