@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { GameState, Difficulty } from "@/types/game";
 import { sampleQuestions } from "@/data/sampleQuestions";
@@ -48,7 +48,7 @@ const Index = () => {
   const [maxConsecutiveWrong, setMaxConsecutiveWrong] = useState(0);
   const [totalQuestionsAnswered, setTotalQuestionsAnswered] = useState(0);
 
-  const getNextQuestion = () => {
+  const getNextQuestion = useCallback(() => {
     const availableQuestions = shuffledQuestions.filter(
       q => !usedQuestions.includes(q.id)
     );
@@ -61,9 +61,9 @@ const Index = () => {
     const nextQuestion = availableQuestions[0];
     setUsedQuestions(prev => [...prev, nextQuestion.id]);
     return nextQuestion;
-  };
+  }, [shuffledQuestions, usedQuestions]);
 
-  const startGame = (difficulty: Difficulty, isInfiniteMode: boolean = false) => {
+  const startGame = useCallback((difficulty: Difficulty, isInfiniteMode: boolean = false) => {
     setSelectedDifficulty(difficulty);
     setUsedQuestions([]);
     setIsPaused(false);
@@ -89,9 +89,9 @@ const Index = () => {
       isInfiniteMode,
       failsRemaining: isInfiniteMode ? INFINITE_MODE_MAX_FAILS : undefined,
     });
-  };
+  }, []);
 
-  const handleAnswer = (isCorrect: boolean) => {
+  const handleAnswer = useCallback((isCorrect: boolean) => {
     setTotalQuestionsAnswered(prev => prev + 1);
     
     if (isCorrect) {
@@ -182,9 +182,9 @@ const Index = () => {
         }));
       }
     }
-  };
+  }, [gameState, consecutiveWrong, totalQuestionsAnswered, selectedDifficulty, user, toast, getNextQuestion]);
 
-  const handleContinue = () => {
+  const handleContinue = useCallback(() => {
     // Load next question and reset timer
     setGameState(prev => ({
       ...prev,
@@ -192,9 +192,9 @@ const Index = () => {
       timeLeft: INITIAL_TIME,
     }));
     setIsPaused(false);
-  };
+  }, [getNextQuestion]);
 
-  const gameOver = () => {
+  const gameOver = useCallback(() => {
     setGameState(prev => ({
       ...prev,
       isPlaying: false,
@@ -207,7 +207,7 @@ const Index = () => {
       variant: "destructive",
       duration: 3000,
     });
-  };
+  }, [toast]);
 
   useEffect(() => {
     if (!gameState.isPlaying || gameState.timeLeft === 0 || isPaused) return;

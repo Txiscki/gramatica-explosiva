@@ -28,17 +28,16 @@ const QuestionCard = ({ question, onAnswer, isPaused = false, onContinue }: Ques
     
     setIsCorrect(correct);
     setShowFeedback(true);
+    
+    // Call onAnswer immediately to stop timer
+    onAnswer(correct);
 
     if (correct) {
-      // Auto-continue for correct answers
+      // Auto-continue for correct answers after showing feedback
       setTimeout(() => {
-        onAnswer(correct);
         setUserAnswer("");
         setShowFeedback(false);
       }, 1500);
-    } else {
-      // Wait for manual continue on wrong answers - timer will pause automatically
-      onAnswer(false);
     }
   };
 

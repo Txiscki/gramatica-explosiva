@@ -190,11 +190,6 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
             )}
           </div>
           
-          {!infiniteUnlocked && userRole === "student" && (
-            <p className="text-sm text-muted-foreground text-center mt-2">
-              Complete 10 normal runs at this level to unlock Infinite Mode
-            </p>
-          )}
         </CardContent>
       </Card>
         </div>
