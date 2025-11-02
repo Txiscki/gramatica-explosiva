@@ -57,7 +57,7 @@ export const wordSets: WordSet[] = [
     id: "b1_3",
     letters: "GARDNE",
     targetWord: "GARDEN",
-    validWords: ["AGE", "DAD", "EAR", "END", "RAG", "RED", "AGED", "DARE", "DEAR", "DRAG", "EARN", "GEAR", "GRAD", "GRAND", "RANGE", "GARDEN", "DANGER", "GANDER"],
+    validWords: ["AGE", "NEAR", "EAR", "END", "RAG", "RED", "AGED", "DARE", "DEAR", "DRAG", "EARN", "GEAR", "GRAD", "GRAND", "RANGE", "GARDEN", "DANGER", "GANDER", "ARE"],
     difficulty: "b1",
     hint: "A place where plants grow"
   },
