@@ -18,7 +18,8 @@ export const userProfileSchema = z.object({
   displayName: z.string().trim().min(1).max(100),
   organizationId: z.string().max(100).optional(),
   classGroup: z.string().max(100).optional(),
-  favoriteStudents: z.array(z.string().max(100)).optional()
+  favoriteStudents: z.array(z.string().max(100)).optional(),
+  linkedTeacher: z.string().max(128).optional()
 });
 
 // Game session validation schema

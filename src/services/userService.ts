@@ -9,6 +9,7 @@ export interface UserProfile {
   organizationId?: string;
   classGroup?: string;
   favoriteStudents?: string[];
+  linkedTeacher?: string;
   createdAt?: number;
 }
 

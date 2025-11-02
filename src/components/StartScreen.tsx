@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, LayoutDashboard, Infinity } from "lucide-react";
+import { LogOut, LayoutDashboard, Infinity, Trophy } from "lucide-react";
 import bombImage from "@/assets/bomb.png";
 import { Difficulty } from "@/types/game";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/services/authService";
 import BadgeDisplay from "./BadgeDisplay";
 import Footer from "./Footer";
+import LinkToTeacherDialog from "./LinkToTeacherDialog";
 import { getInfiniteModeProgress } from "@/services/infiniteModeService";
 
 interface StartScreenProps {
@@ -92,13 +93,20 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
               <p className="text-muted-foreground">Role: {userRole}</p>
             </div>
             <div className="flex gap-2">
+              <Button onClick={() => navigate("/leaderboard")} variant="outline" size="sm">
+                <Trophy className="w-4 h-4 mr-2" />
+                Leaderboard
+              </Button>
               {userRole === "teacher" && (
-                <Button onClick={() => navigate("/teacher-dashboard")} variant="outline">
+                <Button onClick={() => navigate("/teacher-dashboard")} variant="outline" size="sm">
                   <LayoutDashboard className="w-4 h-4 mr-2" />
                   Dashboard
                 </Button>
               )}
-              <Button onClick={handleSignOut} variant="outline">
+              {userRole === "student" && user && (
+                <LinkToTeacherDialog studentId={user.uid} />
+              )}
+              <Button onClick={handleSignOut} variant="outline" size="sm">
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>

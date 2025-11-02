@@ -80,11 +80,19 @@ const Index = () => {
     setMaxConsecutiveWrong(0);
     setTotalQuestionsAnswered(0);
     
+    // Get all questions for the selected difficulty
     const difficultyQuestions = sampleQuestions.filter(q => q.difficulty === difficulty);
-    const shuffled = [...difficultyQuestions].sort(() => Math.random() - 0.5);
+    
+    // Shuffle questions using Fisher-Yates algorithm for better randomization
+    const shuffled = [...difficultyQuestions];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
     setShuffledQuestions(shuffled);
     
-    // Mark the first question as used immediately
+    // Reset used questions and mark ONLY the first question as used
     setUsedQuestions([shuffled[0].id]);
     
     setGameState({

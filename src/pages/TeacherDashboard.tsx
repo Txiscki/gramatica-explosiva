@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getSessionsByUserIds, GameSession } from "@/services/gameSessionService";
 import { getUsersByOrganization, getUsersByIds, UserProfile } from "@/services/userService";
 import { getUserAchievements } from "@/services/achievementService";
+import TeacherCodeDisplay from "@/components/TeacherCodeDisplay";
 import Footer from "@/components/Footer";
 
 const TeacherDashboard = () => {
@@ -122,7 +123,9 @@ const TeacherDashboard = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
+        {user && <TeacherCodeDisplay teacherId={user.uid} />}
+
+        <div className="grid md:grid-cols-3 gap-4 my-8">
           <Card>
             <CardHeader className="pb-2">
               <CardDescription>Total Students</CardDescription>
