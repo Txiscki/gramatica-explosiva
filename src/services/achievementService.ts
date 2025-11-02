@@ -8,7 +8,7 @@ export interface Achievement {
   description: string;
   icon: string;
   requirement: number;
-  type: "score" | "streak" | "games" | "level" | "infinite";
+  type: "score" | "streak" | "games" | "level" | "infinite" | "leaderboard";
   isSecret?: boolean;
 }
 
@@ -202,6 +202,39 @@ export const ACHIEVEMENTS: Achievement[] = [
     requirement: 1500,
     type: "infinite",
     isSecret: true
+  },
+  {
+    id: "the_climb",
+    name: "The Climb",
+    description: "Complete your first game - the start of your journey",
+    icon: "🪜",
+    requirement: 1,
+    type: "games"
+  },
+  {
+    id: "the_peak",
+    name: "The Peak",
+    description: "Reach the Top 10 leaderboard for your level",
+    icon: "🏔️",
+    requirement: 1,
+    type: "leaderboard"
+  },
+  {
+    id: "the_one_above_all",
+    name: "The One Above All",
+    description: "Reach #1 in the leaderboard",
+    icon: "🌌",
+    requirement: 1,
+    type: "leaderboard"
+  },
+  {
+    id: "word_master",
+    name: "Word Master",
+    description: "Find all possible words in a Word Builder set",
+    icon: "📖",
+    requirement: 1,
+    type: "games",
+    isSecret: true
   }
 ];
 
@@ -280,6 +313,9 @@ export const checkAndAwardAchievements = async (
           shouldAward = completionTimeSeconds <= 300 && !isInfiniteMode;
         } else if (achievement.id === "comeback") {
           shouldAward = hadComeback && !isInfiniteMode;
+        } else if (achievement.id === "the_climb" || achievement.id === "first_win") {
+          // First game completion
+          shouldAward = gameCount === 1 && !isInfiniteMode;
         } else {
           shouldAward = gameCount >= achievement.requirement && !isInfiniteMode;
         }

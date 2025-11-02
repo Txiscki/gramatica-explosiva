@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, LayoutDashboard, Infinity, Trophy } from "lucide-react";
+import { LogOut, LayoutDashboard, Infinity, Trophy, Award, Sparkles } from "lucide-react";
 import bombImage from "@/assets/bomb.png";
 import { Difficulty } from "@/types/game";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +12,7 @@ import BadgeDisplay from "./BadgeDisplay";
 import Footer from "./Footer";
 import LinkToTeacherDialog from "./LinkToTeacherDialog";
 import { getInfiniteModeProgress } from "@/services/infiniteModeService";
+import { getWordBuilderProgress } from "@/services/wordBuilderService";
 
 interface StartScreenProps {
   onStart: (difficulty: Difficulty, isInfiniteMode?: boolean) => void;
@@ -22,21 +23,28 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
   const { user, userRole } = useAuth();
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("b1");
   const [infiniteUnlocked, setInfiniteUnlocked] = useState(false);
+  const [wordBuilderFreeUnlocked, setWordBuilderFreeUnlocked] = useState(false);
 
   useEffect(() => {
-    const checkInfiniteMode = async () => {
+    const checkModes = async () => {
       if (user && selectedDifficulty) {
-        // Teachers always have infinite mode unlocked
+        // Teachers always have all modes unlocked
         if (userRole === "teacher") {
           setInfiniteUnlocked(true);
+          setWordBuilderFreeUnlocked(true);
           return;
         }
         
-        const progress = await getInfiniteModeProgress(user.uid, selectedDifficulty);
-        setInfiniteUnlocked(progress.unlocked);
+        const [infiniteProgress, wordBuilderProgress] = await Promise.all([
+          getInfiniteModeProgress(user.uid, selectedDifficulty),
+          getWordBuilderProgress(user.uid, selectedDifficulty)
+        ]);
+        
+        setInfiniteUnlocked(infiniteProgress.unlocked);
+        setWordBuilderFreeUnlocked(wordBuilderProgress.freeUnlocked);
       }
     };
-    checkInfiniteMode();
+    checkModes();
   }, [user, selectedDifficulty, userRole]);
 
   const handleSignOut = async () => {
@@ -92,10 +100,14 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
               <h2 className="text-2xl font-bold">Welcome back!</h2>
               <p className="text-muted-foreground">Role: {userRole}</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button onClick={() => navigate("/leaderboard")} variant="outline" size="sm">
                 <Trophy className="w-4 h-4 mr-2" />
                 Leaderboard
+              </Button>
+              <Button onClick={() => navigate("/achievements")} variant="outline" size="sm">
+                <Award className="w-4 h-4 mr-2" />
+                Achievements
               </Button>
               {userRole === "teacher" && (
                 <Button onClick={() => navigate("/teacher-dashboard")} variant="outline" size="sm">
@@ -166,7 +178,7 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <Button
               onClick={() => onStart(selectedDifficulty, false)}
               size="lg"
@@ -192,8 +204,42 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
                 disabled
                 className="w-full text-xl font-bold h-16 opacity-50 cursor-not-allowed"
               >
-                <span className="text-2xl mr-2">???</span>
-                Locked Mode
+                <span className="text-2xl mr-2">🔒</span>
+                Locked: Complete 10 runs
+              </Button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button
+              onClick={() => navigate("/word-builder", { state: { difficulty: selectedDifficulty, mode: "classroom" } })}
+              size="lg"
+              variant="outline"
+              className="w-full text-lg font-bold h-14 shadow-lg hover:scale-105 transition-transform"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              Word Builder (Classroom)
+            </Button>
+            
+            {wordBuilderFreeUnlocked ? (
+              <Button
+                onClick={() => navigate("/word-builder", { state: { difficulty: selectedDifficulty, mode: "free" } })}
+                size="lg"
+                variant="outline"
+                className="w-full text-lg font-bold h-14 shadow-lg hover:scale-105 transition-transform"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Word Builder (Free Mode)
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                variant="outline"
+                disabled
+                className="w-full text-lg font-bold h-14 opacity-50 cursor-not-allowed"
+              >
+                <span className="text-xl mr-2">🔒</span>
+                Free Mode: 10 Classroom Runs
               </Button>
             )}
           </div>

@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { saveGameSession, getTopScoresByLevel, getTopStreaksByLevel, GameSession } from "@/services/gameSessionService";
 import { checkAndAwardAchievements, Achievement } from "@/services/achievementService";
+import { updateLeaderboardAchievements } from "@/services/leaderboardAchievementService";
 import { getUserSessions } from "@/services/gameSessionService";
 import { Difficulty } from "@/types/game";
 
@@ -93,6 +94,9 @@ const GameOverScreen = ({
             infiniteModeUnlocked,
             infiniteModeZeroMistakes
           );
+
+          // Check for leaderboard-based achievements (The Peak, The One Above All)
+          await updateLeaderboardAchievements(user.uid, difficulty);
 
           if (achievements.length > 0) {
             setNewAchievements(achievements);
