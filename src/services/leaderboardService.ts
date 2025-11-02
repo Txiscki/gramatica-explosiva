@@ -1,71 +1,68 @@
-import { getFirestore, collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, query, orderBy, limit, getDocs } from "firebase/firestore";
+import { leaderboardEntrySchema } from "@/lib/validation";
 
-const db = getFirestore();
-
-/**
- * Get top scores for a specific level (difficulty)
- */
-export async function getTopScoresByLevel(level: string, maxResults = 10) {
-  try {
-    const q = query(
-      collection(db, "game_sessions"),
-      where("difficulty", "==", level),
-      orderBy("score", "desc"),
-      limit(maxResults)
-    );
-
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-  } catch (error) {
-    console.error("Error fetching top scores:", error);
-    return [];
-  }
+export interface LeaderboardEntry {
+  name: string;
+  score?: number;
+  streak?: number;
+  timestamp: number;
 }
 
-/**
- * Get top streaks for a specific level (difficulty)
- */
-export async function getTopStreaksByLevel(level: string, maxResults = 10) {
+export const saveHighScore = async (name: string, score: number) => {
+  try {
+    // Validate leaderboard entry
+    const validatedEntry = leaderboardEntrySchema.parse({
+      name,
+      score,
+      timestamp: Date.now()
+    });
+    
+    await addDoc(collection(db, "leaderboards_highscore"), validatedEntry);
+  } catch (error) {
+    throw new Error("Unable to save high score");
+  }
+};
+
+export const saveHighStreak = async (name: string, streak: number) => {
+  try {
+    // Validate leaderboard entry
+    const validatedEntry = leaderboardEntrySchema.parse({
+      name,
+      streak,
+      timestamp: Date.now()
+    });
+    
+    await addDoc(collection(db, "leaderboards_streak"), validatedEntry);
+  } catch (error) {
+    throw new Error("Unable to save high streak");
+  }
+};
+
+export const getTopScores = async (limitCount: number = 10): Promise<LeaderboardEntry[]> => {
   try {
     const q = query(
-      collection(db, "game_sessions"),
-      where("difficulty", "==", level),
+      collection(db, "leaderboards_highscore"),
+      orderBy("score", "desc"),
+      limit(limitCount)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as LeaderboardEntry);
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getTopStreaks = async (limitCount: number = 10): Promise<LeaderboardEntry[]> => {
+  try {
+    const q = query(
+      collection(db, "leaderboards_streak"),
       orderBy("streak", "desc"),
-      limit(maxResults)
+      limit(limitCount)
     );
-
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as LeaderboardEntry);
   } catch (error) {
-    console.error("Error fetching top streaks:", error);
     return [];
   }
-}
-
-/**
- * Get top players globally (across all levels)
- */
-export async function getGlobalLeaderboard(maxResults = 10) {
-  try {
-    const q = query(
-      collection(db, "game_sessions"),
-      orderBy("score", "desc"),
-      limit(maxResults)
-    );
-
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-  } catch (error) {
-    console.error("Error fetching global leaderboard:", error);
-    return [];
-  }
-}
+};
