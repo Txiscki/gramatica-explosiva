@@ -47,7 +47,9 @@ const LeaderboardPage = () => {
 
         setLeaderboards(results);
       } catch (error) {
-        console.error("Error loading leaderboards:", error);
+        if (import.meta.env.DEV) {
+          console.error("Error loading leaderboards:", error);
+        }
       } finally {
         setLoading(false);
       }

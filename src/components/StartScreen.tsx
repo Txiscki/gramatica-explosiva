@@ -8,7 +8,6 @@ import bombImage from "@/assets/bomb.png";
 import { Difficulty } from "@/types/game";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/services/authService";
-import BadgeDisplay from "./BadgeDisplay";
 import Footer from "./Footer";
 import LinkToTeacherDialog from "./LinkToTeacherDialog";
 import { getInfiniteModeProgress } from "@/services/infiniteModeService";
@@ -125,8 +124,6 @@ const StartScreen = ({ onStart }: StartScreenProps) => {
             </div>
           </div>
         )}
-
-        {user && <BadgeDisplay userId={user.uid} />}
 
       <Card className="w-full shadow-2xl border-2 animate-bounce-in">
         <CardHeader className="text-center pb-0">

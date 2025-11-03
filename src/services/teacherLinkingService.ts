@@ -51,7 +51,9 @@ export const getOrCreateTeacherCode = async (teacherId: string): Promise<string>
     
     return code;
   } catch (error) {
-    console.error("Error creating teacher code:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error creating teacher code:", error);
+    }
     throw new Error("Failed to generate teacher code");
   }
 };
@@ -59,8 +61,15 @@ export const getOrCreateTeacherCode = async (teacherId: string): Promise<string>
 // Link student to teacher using code
 export const linkStudentToTeacher = async (studentId: string, teacherCode: string): Promise<boolean> => {
   try {
+    // Validate input format
+    const sanitizedCode = teacherCode.trim().toUpperCase();
+    
+    if (!/^[A-Z2-9]{6}$/.test(sanitizedCode)) {
+      throw new Error("Invalid code format. Teacher codes are exactly 6 characters (A-Z, 2-9).");
+    }
+    
     // Find teacher by code
-    const codeRef = doc(db, "code_to_teacher", teacherCode.toUpperCase());
+    const codeRef = doc(db, "code_to_teacher", sanitizedCode);
     const codeSnap = await getDoc(codeRef);
     
     if (!codeSnap.exists()) {
@@ -83,7 +92,9 @@ export const linkStudentToTeacher = async (studentId: string, teacherCode: strin
     
     return true;
   } catch (error) {
-    console.error("Error linking student to teacher:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error linking student to teacher:", error);
+    }
     throw error;
   }
 };
@@ -100,7 +111,9 @@ export const getLinkedTeacher = async (studentId: string): Promise<string | null
     
     return null;
   } catch (error) {
-    console.error("Error getting linked teacher:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error getting linked teacher:", error);
+    }
     return null;
   }
 };

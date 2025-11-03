@@ -183,6 +183,37 @@ service cloud.firestore {
     }
     
     // ============================================================
+    // TEACHER CODES COLLECTION
+    // ============================================================
+    match /teacher_codes/{teacherId} {
+      // Only teachers can read their own code
+      allow read: if isAuthenticated() && request.auth.uid == teacherId;
+      
+      // Only teachers can create/update their own code
+      allow create, update: if isAuthenticated() && 
+                            request.auth.uid == teacherId &&
+                            isTeacher();
+      
+      // No deletes
+      allow delete: if false;
+    }
+    
+    // ============================================================
+    // CODE TO TEACHER LOOKUP COLLECTION
+    // ============================================================
+    match /code_to_teacher/{code} {
+      // Anyone authenticated can read (needed for student linking)
+      allow read: if isAuthenticated();
+      
+      // Only teachers can create code mappings
+      allow create: if isTeacher();
+      
+      // No updates or deletes
+      allow update: if false;
+      allow delete: if false;
+    }
+    
+    // ============================================================
     // DEFAULT DENY ALL
     // ============================================================
     // Any collection not explicitly defined above is denied by default

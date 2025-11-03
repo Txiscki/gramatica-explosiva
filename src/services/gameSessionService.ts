@@ -56,6 +56,9 @@ export const getTopScoresByLevel = async (difficulty: Difficulty, limitCount: nu
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("Error fetching top scores:", error);
+    }
     return [];
   }
 };
@@ -71,6 +74,9 @@ export const getTopStreaksByLevel = async (difficulty: Difficulty, limitCount: n
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => doc.data() as GameSession);
   } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("Error fetching top streaks:", error);
+    }
     return [];
   }
 };
