@@ -25,7 +25,9 @@ export const getWordBuilderProgress = async (userId: string, difficulty: Difficu
       freeUnlocked: false
     };
   } catch (error) {
-    console.error("Error getting word builder progress:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error getting word builder progress:", error);
+    }
     return {
       classroomRunsCompleted: 0,
       freeUnlocked: false
@@ -51,7 +53,9 @@ export const incrementClassroomRuns = async (userId: string, difficulty: Difficu
       });
     }
   } catch (error) {
-    console.error("Error incrementing classroom runs:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error incrementing classroom runs:", error);
+    }
   }
 };
 
@@ -70,6 +74,8 @@ export const saveWordBuilderSession = async (session: WordBuilderSession): Promi
   try {
     await setDoc(doc(db, "word_builder_sessions", `${session.userId}_${Date.now()}`), session);
   } catch (error) {
-    console.error("Error saving word builder session:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error saving word builder session:", error);
+    }
   }
 };

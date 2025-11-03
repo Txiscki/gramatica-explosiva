@@ -153,6 +153,43 @@ service cloud.firestore {
     }
     
     // ============================================================
+    // WORD BUILDER PROGRESS COLLECTION
+    // ============================================================
+    match /word_builder_progress/{progressId} {
+      // Users can only read their own progress
+      allow read: if isAuthenticated() && 
+                    resource.data.userId == request.auth.uid;
+      
+      // Users can only create their own progress
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == request.resource.data.userId;
+      
+      // Users can only update their own progress
+      allow update: if isAuthenticated() && 
+                      resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own progress
+      allow delete: if isAuthenticated() && 
+                      resource.data.userId == request.auth.uid;
+    }
+    
+    // ============================================================
+    // WORD BUILDER SESSIONS COLLECTION
+    // ============================================================
+    match /word_builder_sessions/{sessionId} {
+      // All authenticated users can read sessions (for potential leaderboards)
+      allow read: if isAuthenticated();
+      
+      // Users can only create sessions for themselves
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == request.resource.data.userId;
+      
+      // No one can update or delete word builder sessions (immutable)
+      allow update: if false;
+      allow delete: if false;
+    }
+    
+    // ============================================================
     // LEADERBOARDS - HIGH SCORE COLLECTION
     // ============================================================
     match /leaderboards_highscore/{entryId} {
