@@ -55,8 +55,13 @@ service cloud.firestore {
                       request.auth.uid == userId &&
                       request.auth.uid == request.resource.data.uid;
       
-      // Users can only update their own profile
-      allow update: if isOwner(userId);
+      // Users can update their own profile OR
+      // Students can add themselves to a teacher's favoriteStudents array
+      allow update: if isOwner(userId) ||
+                      (isAuthenticated() && 
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['favoriteStudents']) &&
+                       request.resource.data.favoriteStudents.hasAll(resource.data.get('favoriteStudents', [])) &&
+                       request.resource.data.favoriteStudents.hasAny([request.auth.uid]));
       
       // No one can delete profiles
       allow delete: if false;
