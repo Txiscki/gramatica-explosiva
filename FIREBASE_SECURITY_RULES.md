@@ -106,14 +106,51 @@ service cloud.firestore {
       // All authenticated users can read sessions (needed for leaderboards)
       allow read: if isAuthenticated();
       
-      // Users can only create sessions for themselves
+      // Users can only create sessions for themselves with valid data
       allow create: if isAuthenticated() && 
-                      request.auth.uid == request.resource.data.userId;
+                      request.auth.uid == request.resource.data.userId &&
+                      request.resource.data.displayName is string &&
+                      request.resource.data.difficulty is string &&
+                      request.resource.data.score is number &&
+                      request.resource.data.streak is number &&
+                      request.resource.data.timestamp is number;
       
       // No one can update or delete game sessions (immutable)
       allow update: if false;
       allow delete: if false;
     }
+    
+    // ⚠️ CRITICAL: FIRESTORE COMPOSITE INDEXES REQUIRED FOR LEADERBOARDS
+    // 
+    // The leaderboard queries WILL NOT WORK without these indexes.
+    // You must create these in Firebase Console:
+    //
+    // INDEX 1 - Top Scores by Difficulty:
+    //   Collection ID: game_sessions
+    //   Fields indexed:
+    //     - difficulty: Ascending
+    //     - score: Descending
+    //   Query scope: Collection
+    //
+    // INDEX 2 - Top Streaks by Difficulty:
+    //   Collection ID: game_sessions  
+    //   Fields indexed:
+    //     - difficulty: Ascending
+    //     - streak: Descending
+    //   Query scope: Collection
+    //
+    // HOW TO CREATE INDEXES:
+    // Method 1 (Easiest): 
+    //   - Visit the leaderboard page in your app
+    //   - Check browser console for error
+    //   - Click the link in the error to auto-create the index
+    //
+    // Method 2 (Manual):
+    //   - Go to Firebase Console > Firestore Database > Indexes
+    //   - Click "Create Index"
+    //   - Enter collection ID: game_sessions
+    //   - Add fields as specified above
+    //   - Click "Create"
     
     // ============================================================
     // USER ACHIEVEMENTS COLLECTION
