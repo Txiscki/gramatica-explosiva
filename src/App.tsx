@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import TeacherDashboard from "./pages/TeacherDashboard";
+import StudentDetail from "./pages/StudentDetail";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import AchievementsPage from "./pages/AchievementsPage";
 import WordBuilderGame from "./pages/WordBuilderGame";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
+            <Route path="/student/:studentId" element={<StudentDetail />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/achievements" element={<AchievementsPage />} />
             <Route path="/word-builder" element={<WordBuilderGame />} />

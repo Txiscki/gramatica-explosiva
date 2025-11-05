@@ -120,6 +120,9 @@ export const getSessionsByUserIds = async (userIds: string[]): Promise<GameSessi
     
     return results.flat().sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("Error fetching sessions by user IDs:", error);
+    }
     return [];
   }
 };

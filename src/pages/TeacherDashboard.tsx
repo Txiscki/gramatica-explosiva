@@ -89,7 +89,15 @@ const TeacherDashboard = () => {
     const totalCorrectAnswers = studentSessions.reduce((sum, s) => sum + (s.correctAnswers || 0), 0);
     const perfectGames = studentSessions.filter(s => s.isPerfectGame).length;
 
-    return { totalGames, totalScore, maxStreak, avgScore, totalCorrectAnswers, perfectGames };
+    // Calculate most played difficulty
+    const difficultyCount = studentSessions.reduce((acc, s) => {
+      acc[s.difficulty] = (acc[s.difficulty] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    const mostPlayedDifficulty = Object.entries(difficultyCount)
+      .sort(([, a], [, b]) => b - a)[0]?.[0] || "-";
+
+    return { totalGames, totalScore, maxStreak, avgScore, totalCorrectAnswers, perfectGames, mostPlayedDifficulty };
   };
 
   const difficultyColors = {
@@ -161,6 +169,7 @@ const TeacherDashboard = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Student Name</TableHead>
+                  <TableHead className="text-center">Level</TableHead>
                   <TableHead className="text-center">Games</TableHead>
                   <TableHead className="text-center">Total Score</TableHead>
                   <TableHead className="text-center">Avg Score</TableHead>
@@ -174,8 +183,17 @@ const TeacherDashboard = () => {
                   const stats = getStudentStats(user.uid!);
                   const achievementCount = userAchievements[user.uid!] || 0;
                   return (
-                    <TableRow key={user.uid}>
-                      <TableCell className="font-medium">{user.displayName}</TableCell>
+                    <TableRow 
+                      key={user.uid} 
+                      className="cursor-pointer hover:bg-accent/50"
+                      onClick={() => navigate(`/student/${user.uid}`)}
+                    >
+                      <TableCell className="font-medium text-primary hover:underline">{user.displayName}</TableCell>
+                      <TableCell className="text-center">
+                        <Badge className={difficultyColors[stats.mostPlayedDifficulty as keyof typeof difficultyColors]}>
+                          {stats.mostPlayedDifficulty.toUpperCase()}
+                        </Badge>
+                      </TableCell>
                       <TableCell className="text-center">{stats.totalGames}</TableCell>
                       <TableCell className="text-center">{stats.totalScore}</TableCell>
                       <TableCell className="text-center">{stats.avgScore}</TableCell>
@@ -196,7 +214,7 @@ const TeacherDashboard = () => {
                 })}
                 {users.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
                       No students yet
                     </TableCell>
                   </TableRow>
