@@ -202,6 +202,24 @@ const Index = () => {
   }, [gameState, consecutiveWrong, totalQuestionsAnswered, selectedDifficulty, user, toast, getNextQuestion]);
 
   const handleContinue = useCallback(() => {
+    // Check if normal mode is complete (20 questions)
+    const isNormalModeComplete = !gameState.isInfiniteMode && totalQuestionsAnswered >= NORMAL_MODE_QUESTIONS;
+    
+    if (isNormalModeComplete) {
+      // End the game
+      setGameState(prev => ({
+        ...prev,
+        isPlaying: false,
+        isGameOver: true,
+      }));
+      
+      // Increment normal runs for infinite mode unlock
+      if (user) {
+        incrementNormalRunsCompleted(user.uid, selectedDifficulty);
+      }
+      return;
+    }
+    
     // Load next question and reset timer
     setGameState(prev => ({
       ...prev,
@@ -209,7 +227,7 @@ const Index = () => {
       timeLeft: INITIAL_TIME,
     }));
     setIsPaused(false);
-  }, [getNextQuestion]);
+  }, [getNextQuestion, gameState.isInfiniteMode, totalQuestionsAnswered, user, selectedDifficulty]);
 
   const gameOver = useCallback(() => {
     setGameState(prev => ({
